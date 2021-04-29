@@ -1,0 +1,12 @@
+numpy
+tqdm
+matplotlib
+kafka-python
+csaps
+omegaconf
+hydra-core>=1.0.4
+pandas
+
+tensorflow
+Keras
+keras-lmu

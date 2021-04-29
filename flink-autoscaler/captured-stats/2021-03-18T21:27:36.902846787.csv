@@ -1,0 +1,2 @@
+Timestamp,Kafka Lag,Kafka Message Rate,Flink Records In,CPU,Mem,Long-Term Prediction,Short-Term Prediction,Aggregate Prediction,Parallelism,Lag Latency
+2021-03-18T20:27:39,11343,6065.7724609375,2687.457763671875,0.08792319148778915,0.3486216068267822,NaN,NaN,6065.7724609375,0,39.16640090942383
