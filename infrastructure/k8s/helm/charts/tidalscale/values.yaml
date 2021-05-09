@@ -1,0 +1,71 @@
+app:
+  image:
+    repo: eu.gcr.io/tidalscale/tidalscale:1.0.0-SNAPSHOT-1
+    imagePullPolicy: Always
+  loggingLevel: debug
+  r2dbcLoggingLevel: debug
+  r2dbJpaShowSQL: true
+  port: 8080
+  quotas:
+  requests:
+    cpu: "500m"
+    memory: "1000Mi"
+  limits:
+    cpu: "1500m"
+    memory: "8500Mi"
+spring:
+  profile: staging
+  cloud:
+    stream:
+      function:
+        definition: metrics;shortTermPredictions;longTermPredictions
+        bindings:
+          metricsIn0: prometheus-metrics
+          shortTermPredictionsIn0: short-term-predictions
+          longTermPredictionsIn0: long-term-predictions
+      kafka:
+        binder:
+          brokers: kafka:9092
+      bindings:
+        prometheusMetrics:
+          destination: metric
+          group: autoscaling-group
+          contentType: application/json
+        shortTermPredictions:
+          destination: short-term-predictions
+          group: st-autoscaling-group
+          contentType: application/json
+        longTermPredictions:
+          destination: long-term-predictions
+          group: lt-autoscaling-group
+          contentType: application/json
+kafka:
+  bootstrapServerHost: kafka
+  bootstrapServerPort: 9092
+  stPredictionTopic: st-prediction
+  ltPredictionTopic: lt-prediction
+  topic: metric
+  clientId: flink-autoscaler
+  acksConfig: all
+r2dbc:
+  postgres:
+    hostname: postgres
+    database: postgres
+    port: 5432
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+metricsServer:
+  prometheus:
+    baseUrl: http://prometheus:9090
+    sourceTopic: covid
+autoscaler:
+  flink:
+    baseUrl: http://flink-cluster-service:8081
+    jobId: 9a909a6676240e3ce4632ba80787913a
+    jarId: b6b6e3db-dfee-4e27-bb5a-f9375804f12f_covid-engine-2.3.2.jar
+    programArgs: --statebackend.default false --checkpoint hdfs://hadoop-hdfs-namenode:8020/flink/checkpoints --checkpoint.interval 300000
+    # Use these Flink program args for the experiment with the iot simulator
+    #program-args: vehicles 35.246.173.215:31090,35.246.217.71:31092,35.246.217.71:31091 iot-vehicles-events iot-vehicles-notifications 1 30000
+    savepointDirectory: hdfs://hadoop-hdfs-namenode:8020/flink/savepoints
+    cooldownDuration: 200

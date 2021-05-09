@@ -1,0 +1,5 @@
+apiVersion: v2
+name: tidalscale
+description: TidalScale chart used for autoscaling actions
+type: application
+version: 1.0.0-RELEASE

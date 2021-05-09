@@ -1,0 +1,46 @@
+# k8s configmap for covid19-simulator
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  APP_PORT: {{ .Values.app.port | quote}}
+  LOGGING_LEVEL: {{ .Values.app.loggingLevel | quote}}
+  R2DBC_LOGGING_LEVEL: {{ .Values.app.r2dbcLoggingLevel | quote}}
+  R2DBC_JPA_SHOW_SQL: {{ .Values.app.r2dbJpaShowSQL | quote}}
+  SPRING_PROFILES_ACTIVE: {{ .Values.spring.profile | quote}}
+  KAFKA_BOOTSTRAP_SERVER_HOST: {{ .Values.kafka.bootstrapServerHost | quote}}
+  KAFKA_BOOTSTRAP_SERVER_PORT: {{ .Values.kafka.bootstrapServerPort | quote}}
+  KAFKA_ST_PREDICTION_TOPIC: {{ .Values.kafka.stPredictionTopic | quote}}
+  KAFKA_LT_PREDICTION_TOPIC: {{ .Values.kafka.ltPredictionTopic | quote}}
+  KAFKA_TOPIC: {{ .Values.kafka.topic | quote}}
+  KAFKA_CLIENT_ID: {{ .Values.kafka.clientId | quote }}
+  KAFKA_ACKS_CONFIG: {{ .Values.kafka.acksConfig | quote}}
+  R2DBC_POSTGRES_DATABASE: {{ .Values.r2dbc.postgres.database | quote}}
+  R2DBC_POSTGRES_HOSTNAME: {{ .Values.r2dbc.postgres.hostname | quote}}
+  R2DBC_POSTGRES_PASSWORD: {{ .Values.r2dbc.postgres.password | quote}}
+  R2DBC_POSTGRES_PORT: {{ .Values.r2dbc.postgres.port | quote}}
+  R2DBC_POSTGRES_USERNAME: {{ .Values.r2dbc.postgres.username | quote}}
+  R2DBC_POSTGRES_DRIVER_CLASS_NAME: {{ .Values.r2dbc.postgres.driverClassName | quote}}
+  METRICS_SERVER_PROMETHEUS_BASE_URL: {{ .Values.metricsServer.prometheus.baseUrl | quote}}
+  METRICS_SERVER_PROMETHEUS_SOURCE_TOPIC: {{ .Values.metricsServer.prometheus.sourceTopic | quote}}
+  AUTOSCALER_FLINK_BASE_URL: {{ .Values.autoscaler.flink.baseUrl | quote}}
+  AUTOSCALER_FLINK_JOB_ID: {{ .Values.autoscaler.flink.jobId | quote}}
+  AUTOSCALER_FLINK_JAR_ID: {{ .Values.autoscaler.flink.jarId | quote}}
+  AUTOSCALER_FLINK_PROGRAM_ARGS: {{ .Values.autoscaler.flink.programArgs | quote}}
+  AUTOSCALER_FLINK_SAVEPOINT_DIRECTORY: {{ .Values.autoscaler.flink.savepointDirectory | quote}}
+  AUTOSCALER_FLINK_COOLDOWN_DURATION: {{ .Values.autoscaler.flink.cooldownDuration | quote}}
+  SPRING_CLOUD_STREAM_FUNCTION_DEFINITION: {{ .Values.spring.cloud.stream.function.definition | quote}}
+  SPRING_CLOUD_STREAM_FUNCTION_BINDINGS_METRICS_IN_0: {{ .Values.spring.cloud.stream.function.bindings.metricsIn0 | quote}}
+  SPRING_CLOUD_STREAM_FUNCTION_BINDINGS_ST_PREDICTIONS_IN_0: {{ .Values.spring.cloud.stream.function.bindings.shortTermPredictionsIn0 | quote}}
+  SPRING_CLOUD_STREAM_FUNCTION_BINDINGS_LT_PREDICTIONS_IN_0: {{ .Values.spring.cloud.stream.function.bindings.longTermPredictionsIn0 | quote}}
+  SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS: {{ .Values.spring.cloud.stream.kafka.binder.brokers | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.destination | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_GROUP: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.group | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_CONTENT_TYPE: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.contentType | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.contentType | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_GROUP: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.group | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_CONTENT_TYPE: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.contentType | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_LT_PREDICTIONS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.longTermPredictions.destination | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_LT_PREDICTIONS_GROUP: {{ .Values.spring.cloud.stream.bindings.longTermPredictions.group | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_LT_PREDICTIONS_CONTENT_TYPE: {{ .Values.spring.cloud.stream.bindings.longTermPredictions.contentType | quote}}
