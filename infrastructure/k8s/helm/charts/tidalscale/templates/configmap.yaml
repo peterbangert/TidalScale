@@ -38,7 +38,7 @@ data:
   SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.destination | quote}}
   SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_GROUP: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.group | quote}}
   SPRING_CLOUD_STREAM_BINDINGS_PROMETHEUS_CONTENT_TYPE: {{ .Values.spring.cloud.stream.bindings.prometheusMetrics.contentType | quote}}
-  SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.contentType | quote}}
+  SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.destination | quote}}
   SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_GROUP: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.group | quote}}
   SPRING_CLOUD_STREAM_BINDINGS_ST_PREDICTIONS_CONTENT_TYPE: {{ .Values.spring.cloud.stream.bindings.shortTermPredictions.contentType | quote}}
   SPRING_CLOUD_STREAM_BINDINGS_LT_PREDICTIONS_DESTINATION: {{ .Values.spring.cloud.stream.bindings.longTermPredictions.destination | quote}}
