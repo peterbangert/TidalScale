@@ -1,4 +1,4 @@
-#! /bin/sh -
+#! /bin/bash
 #
 # Usage: env FLINK_DIR="..." FLINK_JOB_JAR="..." $0 [job-args ...]
 

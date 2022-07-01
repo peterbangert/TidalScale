@@ -22,7 +22,7 @@ kafka:
 #######################################
 ## Global variables for the redis chart
 redis:
-  enabled: true
+  enabled: false
 
   ## configure cluster size
   replicas: 1

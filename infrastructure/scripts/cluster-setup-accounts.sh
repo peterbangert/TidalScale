@@ -1,9 +1,9 @@
-#! /bin/sh -
+#! /bin/bash
 
 set -eu
 set -x
 
-project="mpds-task-orange"
+project="msc-thesis-354309"
 terraform_user="terraform"
 terraform_service_account="$terraform_user@$project.iam.gserviceaccount.com"
 
@@ -31,7 +31,12 @@ gcloud iam service-accounts add-iam-policy-binding \
 	--role="roles/iam.serviceAccountUser"
 
 # Create service account key for Terraform
-gcloud iam service-accounts keys create ./key.json \
-	--iam-account "$terraform_service_account"
+if [[ -s ./key.json ]]
+then
+	printf "IAM service account key exists"
+else
+	gcloud iam service-accounts keys create ./key.json \
+		--iam-account "$terraform_service_account"
+fi
 
 exit 0

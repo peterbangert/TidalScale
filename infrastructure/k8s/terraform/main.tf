@@ -3,18 +3,18 @@ provider "google" {
   project     = var.project_id
   region      = var.region
   zone        = var.zones[0]
-  version = "~> 3.51"
+  
 }
 
-variable "gke_username" {
-  default     = ""
-  description = "gke username"
-}
+#variable "gke_username" {
+#  default     = ""
+#  description = "gke username"
+#}
 
-variable "gke_password" {
-  default     = ""
-  description = "gke password"
-}
+#variable "gke_password" {
+#  default     = ""
+#  description = "gke password"
+#}
 
 variable "gke_num_nodes" {
   default     = 3
@@ -26,10 +26,10 @@ variable "gke_auto_scaling_enabled" {
   description = "Enable/disable cluster auto scaling"
 }
 
-variable "gke_min_master_version" {
-  default     = "1.16.15-gke.7800"
-  description = "The minimum version of the master node on GKE"
-}
+#variable "gke_min_master_version" {
+#  default     = "1.16.15-gke.7800"
+#  description = "The minimum version of the master node on GKE"
+#}
 
 variable "gke_machine_type" {
   default     = "e2-standard-4"
@@ -81,7 +81,7 @@ resource "google_container_cluster" "dev-cluster" {
   remove_default_node_pool = true
   initial_node_count       = 1
 
-  min_master_version = var.gke_min_master_version
+  #min_master_version = var.gke_min_master_version
 
   enable_binary_authorization = "true"
 
@@ -93,8 +93,8 @@ resource "google_container_cluster" "dev-cluster" {
   subnetwork = google_compute_subnetwork.subnet.self_link
 
   master_auth {
-    username = var.gke_username
-    password = var.gke_password
+    #username = var.gke_username
+    #password = var.gke_password
 
     client_certificate_config {
       issue_client_certificate = false
