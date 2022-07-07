@@ -1,30 +1,52 @@
-# Setting up the infrastructure
+# Infrastructure
 
-The Docker images and Helm charts can be deployed on any Kubernetes Cluster. In this case, the infrastructure was setup
+> The Docker images and Helm charts can be deployed on any Kubernetes Cluster. In this case, the infrastructure was setup
 through the Google Kubernetes Engine (GKE). However, if the Kubernetes Cluster was set up on any other cloud provider or
 on-premise, the Helm charts can be used to do the deployments of the application components.
 
-## Prerequisites
+## Quick Start
 
-* Install Terraform (see https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/gcp-get-started)
-* Install the gcloud sdk (see https://cloud.google.com/sdk) in case the gcp commands are executed from the local machine
-  instead of using Google Cloud Shell
+### Prerequisites
 
-## GKE cluster setup
+* Install [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/gcp-get-started)
+* Install the [gcloud sdk](https://cloud.google.com/sdk)
 
-_Skip this section if there is already an existent Kubernetes Cluster_
+### 1. GKE cluster setup
 
-Run `make cluster-create` to create a cluster.
+ - `make cluster-create` to create a cluster.
 
-In order to destroy it, run `make cluster-destroy`.
+ - To destroy it, run `make cluster-destroy`.
 
-## Deploying the applications
+### 2. Deploying the Applicatoins (hdfs,flink,kafka,redis,prometheus,grafana)
 
-Simply, run `make services-install`.
+ - run `make services-install`.
+
+    - `make hdfs-install`
+    - `make mpds-install`
+    - `make flink-install`
+
+### 3. Access Grafana
+
+1. Get Grafana URL to visit by running these commands in the same shell:
+
+```
+NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services grafana)
+NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+echo http://$NODE_IP:$NODE_PORT
+```
+
+2. Add Data Source
+
+  - login is `admin:admin`
+  - `Configuration > Data Sources > Add Data Source > Prometheus` set Url to `prometheus:9090` click save and test.
+  - `Create > Import > Upload JSON file`, upload `grafana-dashboard.json`
+
+
+## Further Setup Information
 
 ### Deploying Hadoop for HDFS manually
 
-Run `make hdfs-install`.
+ - Run `make hdfs-install`.
 
 ### Deploying Kafka, Prometheus, Grafana, and Redis manually
 
@@ -36,15 +58,6 @@ Deploy the charts with:
 helm install [DEPLOYMENT NAME] [CHART DIRECTORY]
 ```
 
-#### Grafana: additional notes
-
-Get the Grafana URL to visit by running these commands in the same shell:
-
-```
-NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services grafana)
-NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-echo http://$NODE_IP:$NODE_PORT
-```
 
 ##### Viewing metrics in Grafana
 

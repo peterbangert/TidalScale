@@ -1,9 +1,44 @@
-# mpds-orange
+# Tidalscale
+
+> Proactive Autoscaler for cloud based Distributed Stream Processing Engines
 
 ## Overall system design
 
-### Autoscaling system
 
+<p align="center">
+  <img width="900" height="300" src="docs/img/Paper_Architecture-Page.png">
+</p>
+
+
+## Description
+
+TidalScale, a predictive distributed stream processing autoscaler that proposes a refined and simplified model for managing DSP resources at runtime. Tidalscale uses aggregated linear short term and neural network long term predictions to anticipate future load. This enables it to choose resource efficient configurations of the DSP at runtime while maintaining quality of service (QoS). We show that TidalScale is
+capable of efficiently adapting DSP resources to varying loads.
+
+Tidalscale strives to provide a platform agnostic autoscaling solution by analyzing metrics exposed from the container orchestrator system and the intermediate message brokering system. 
+
+## Quick Start
+
+1. Setup example [Infrastructure](./infrastructure/)
+2. Start [Tidalscale](./Tidalscale/)
+
+
+### System Architecture
+
+Tidalscale requires interaction with various compoenents. 
+
+- HDFS, for checkpointing the Stream Processing Job before scaling
+- Kafka, a message brokering system to monitor traffic trends
+- Prometheus, a monitoring system and timeseries database for observing systems health
+
+<p align="center">
+  <img width="430" height="300" src="docs/img/software-infra.png">
+</p>
+
+
+#### Broker
+
+ 
 There are 2 Kafka topics used by the autoscaling system:
 
 - `Metric` for message rate metrics
