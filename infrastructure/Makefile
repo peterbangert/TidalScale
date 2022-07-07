@@ -1,5 +1,5 @@
 HELM_DIR=	k8s/helm
-PROJECT_NAME=	mpds-task-orange
+PROJECT_NAME= msc-thesis-354309
 
 cluster-create:
 	./scripts/cluster-setup-accounts.sh
@@ -9,7 +9,7 @@ cluster-create:
 	${MAKE} flink-push-docker-image
 
 cluster-destroy:
-	cd k8s/terraform && terraform destroy
+	cd k8s/terraform && terraform destroy -auto-approve
 
 services-install:
 	${MAKE} hdfs-install
@@ -38,12 +38,12 @@ mpds-uninstall:
 mpds-upgrade:
 	cd ${HELM_DIR} && helm upgrade mpds .
 
-FLINK_DIR=	flink-1.12.1
+FLINK_DIR=	flink-1.15.0
 FLINK_TARBALL=	${FLINK_DIR}-bin-scala_2.12.tgz
 FLINK_DOCKER_IMAGE=	eu.gcr.io/${PROJECT_NAME}/flink-engine-java11-1.0.0
 
 ${FLINK_TARBALL}:
-	wget -O "$@" "https://downloads.apache.org/flink/flink-1.12.1/$@"
+	wget -O "$@" "https://downloads.apache.org/flink/flink-1.15.0/$@"
 
 ${FLINK_DIR}: ${FLINK_TARBALL}
 	tar -xf "${FLINK_TARBALL}"
