@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8fe07a6c-e60a-4a23-a3e8-ad0566fee22f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../word-count-old/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/config/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/IoT_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/alibaba_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/avazu_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/google_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/horton_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/plot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/retailrocket_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/taxi_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/wiki_de_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/plot/wiki_en_5min.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/run.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/data/WordCountData.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/data/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/model/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/model/producer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/model/source.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/model/trace_file_reader.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/src/traffic_generator.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/IoT_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/IoT_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/IoT_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/alibaba_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/alibaba_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/alibaba_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/avazu_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/avazu_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/avazu_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/google_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/google_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/google_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/horton_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/horton_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/horton_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/retailrocket_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/retailrocket_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/retailrocket_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/taxi_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/taxi_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/taxi_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_de_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_de_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_de_5min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_en_15min.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_en_1h.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../traffic-generators/real-trace-generator/traces/wiki_en_5min.csv" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2Bo939lJzzi48pxzYFVjsCrnxY2" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/pbangert/Code/msc_thesis/TidalScale/flink-jobs/quickstart&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Application.WordCount">
+    <configuration name="DataStreamJob" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.myorg.quickstart.DataStreamJob" />
+      <module name="quickstart" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.myorg.quickstart.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WordCount" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.myorg.quickstart.WordCount" />
+      <module name="quickstart" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.myorg.quickstart.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.WordCount" />
+        <item itemvalue="Application.DataStreamJob" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8fe07a6c-e60a-4a23-a3e8-ad0566fee22f" name="Changes" comment="" />
+      <created>1657561368685</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657561368685</updated>
+      <workItem from="1657561369883" duration="1905000" />
+      <workItem from="1657563761895" duration="712000" />
+      <workItem from="1657619714997" duration="758000" />
+      <workItem from="1657712471944" duration="7934000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/myorg/quickstart/WordCount.java</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
