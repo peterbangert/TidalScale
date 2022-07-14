@@ -2,3 +2,6 @@
 /flink-1.12.1
 /flink-1.12.1-bin-scala_2.12.tgz
 /flink-1.15.0
+*.gz
+*.tgz
+
