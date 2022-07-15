@@ -29,7 +29,7 @@
       },
       "id": 38,
       "panels": [],
-      "title": "Covid Engine",
+      "title": "Masters Thesis",
       "type": "row"
     },
     {
@@ -793,7 +793,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(flink_taskmanager_job_task_operator_KafkaConsumer_records_lag_max) / count(flink_taskmanager_job_task_operator_KafkaConsumer_records_lag_max)",
+          "expr": "sum(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max) / count(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

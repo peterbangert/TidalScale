@@ -6,7 +6,7 @@
 1. Build container image
 
 ```
-$ docker build -t eu.gcr.io/msc-thesis-354309/real-trace-generator .
+docker build -t eu.gcr.io/msc-thesis-354309/real-trace-generator .
 ```
 
 2. Push to Google Container Registry
