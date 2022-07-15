@@ -28,4 +28,4 @@ ln -fs "$PWD/key.json" k8s/terraform/key.json
 # Configure kubectl with Terraform. tr -d removes extra quotations
 (cd k8s/terraform && gcloud container clusters get-credentials \
 	$(terraform output cluster_name | tr -d '"' ) \
-	--zone $(terraform output zone | tr -d '"')
+	--zone $(terraform output zone | tr -d '"'))
