@@ -1,0 +1,44 @@
+{
+  "id": "01d42357-86d5-4f52-8cfa-c26e9f1fb7e4",
+  "name": "Postman Globals",
+  "values": [
+    {
+      "key": "prometheus_address",
+      "value": "http://34.141.29.119:30090",
+      "description": "",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "key": "endpoint_query",
+      "value": "/api/v1/query",
+      "description": "",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "key": "timestamp_example",
+      "value": "2022-07-15T16:24:10.781Z",
+      "description": "",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "key": "endpoint_query_range",
+      "value": "/api/v1/query_range",
+      "description": "",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "key": "timestamp+5s_example",
+      "value": "2022-07-15T16:24:15.781Z",
+      "description": "",
+      "type": "text",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "globals",
+  "_postman_exported_at": "2022-07-15T14:26:20.489Z",
+  "_postman_exported_using": "Postman/5.5.6"
+}
