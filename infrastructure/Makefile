@@ -112,12 +112,18 @@ grafana-get-web-ui:
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
 	echo "http://$$node_ip:$$node_port"
 
+kafka-create-topic:
+	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --create --topic data --partitions 8 --replication-factor 2 --config retention.ms=600000"
+	
+kafka-edit-retention:
+	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --alter --topic data --config retention.ms=300000"
 
+kafka-delete-topic:
+	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic data"
 
-
-
-
-
+kafka-show-topics:
+	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
+	kafkacat -b $$node_ip:31090 -L 
 
 
 
