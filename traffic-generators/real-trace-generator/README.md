@@ -3,26 +3,20 @@
 
 ## Quick Start
 
-1. Build container image
+- Deploy traffic generator
 
 ```
-docker build -t eu.gcr.io/msc-thesis-354309/real-trace-generator .
+make deploy
 ```
 
-2. Push to Google Container Registry
+- Rollout new changes
 
 ```
-docker push eu.gcr.io/msc-thesis-354309/real-trace-generator
+make rollout
 ```
 
-3. Deploy via k8s
+- Destroy Traffic Generator Deployment
 
 ```
-kubectl apply -f real-trace-generator-deployment.yaml
-```
-
-4. Redeploy when new image is created/pushed
-
-```
-kubectl rollout restart deployment/real-trace-generator-deployment
+make destroy
 ```
