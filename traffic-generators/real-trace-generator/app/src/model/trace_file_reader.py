@@ -2,6 +2,14 @@ import config.config
 import numpy as np
 import pandas as pd
 
+"""
+THIS CLASS IS DEPRECATED
+
+This class is replaced by the TraceKafkaReader class. 
+
+"""
+
+
 class TraceFileReader:
 
     def __init__(self,args):
