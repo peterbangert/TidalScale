@@ -95,6 +95,11 @@ flink-get-web-ui:
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}') && \
 	echo "http://$$node_ip:$$node_port"
 
+flink-application-mode-install: ${FLINK_DIR}
+	export FLINK_DIR="${FLINK_DIR}" && \
+	export FLINK_DOCKER_IMAGE="${FLINK_DOCKER_IMAGE}" && \
+	./scripts/flink-application-mode-install.sh
+
 
 ##
 #	POD MANAGEMENT

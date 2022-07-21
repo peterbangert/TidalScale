@@ -27,15 +27,13 @@ on-premise, the Helm charts can be used to do the deployments of the application
 
 ### 3. Access Grafana
 
-  - Get Grafana URL to visit by running these commands in the same shell:
+- Get Grafana URL to visit by running these commands in the same shell:
 
 ```
-NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services grafana)
-NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-echo http://$NODE_IP:$NODE_PORT
+make grafana-get-web-ui
 ```
 
-  - Add Data Source
+- Add Data Source
 
   - login is `admin:admin`
   - `Configuration > Data Sources > Add Data Source > Prometheus` set Url to `prometheus:9090` click save and test.
@@ -43,26 +41,21 @@ echo http://$NODE_IP:$NODE_PORT
 
 ### 4. Setup Flink
 
-  - Acces Flink UI
-
+- Acces Flink UI
 
 ```
-NODE_PORT=$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services flink-cluster-rest)
-NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-echo http://$NODE_IP:$NODE_PORT
+make flink-get-web-ui
 ```
 
-  - Package Flink Job 
+- Package Flink Job 
 
-- Visist [flink-jobs](../flink-jobs/) to package flink job into a `.jar`
+  - Visit [flink-jobs](../flink-jobs/) to package flink job into a `.jar`
 
-  - Submit Flink Job
+- Submit Flink Job Arguments
 
-Submit the Flink job and start the application, e.g.:
-
-- Parallelism: `1`
-- Program Arguments: `--statebackend.default false --checkpoint hdfs://hadoop-hdfs-namenode:8020/flink/checkpoints --checkpoint.interval 600000`
-- Savepoint Path: `hdfs://hadoop-hdfs-namenode:8020/flink/savepoints/savepoint-040a83-73e0bac50483`
+  - Parallelism: `1`
+  - Program Arguments: `--statebackend.default false --checkpoint hdfs://hadoop-hdfs-namenode:8020/flink/checkpoints --checkpoint.interval 600000`
+  - Savepoint Path: `hdfs://hadoop-hdfs-namenode:8020/flink/savepoints/savepoint-040a83-73e0bac50483`
 
 
 
