@@ -24,11 +24,9 @@ if ! kubectl describe serviceaccounts | grep -q '^Name:                flink-ser
 fi
 
 "$flink_dir/bin/flink" \
-    run \
-    --target kubernetes-application \
-	-Dkubernetes.service-account=flink-service-account \
+	run-application \
+	--target kubernetes-application \
 	-Dkubernetes.rest-service.exposed.type="NodePort" \
-	-Dkubernetes.cluster-id=flink-cluster \
 	-Dexecution.attached=false \
 	-Dkubernetes.jobmanager.annotations=prometheus.io/scrape:'true',prometheus.io/port:'9999' \
 	-Dkubernetes.taskmanager.annotations=prometheus.io/scrape:'true',prometheus.io/port:'9999' \
@@ -39,5 +37,8 @@ fi
 	-Dmetrics.reporter.prom.port=9999 \
 	-Dmetrics.reporter.jmx.class=org.apache.flink.metrics.jmx.JMXReporter \
 	-Dmetrics.reporter.jmx.port=8789 \
-    -Dkubernetes.container-image=flink-quickstart \
-    local:///opt/flink/usrlib/quickstart-0.1.jar
+	-Dkubernetes.config.file=/home/pbangert/.kube/config \
+	-Dkubernetes.service-account=flink-service-account \
+	-Dkubernetes.cluster-id=flink-cluster \
+	-Dkubernetes.container.image=eu.gcr.io/msc-thesis-354309/quickstart:latest \
+	local:///opt/flink/usrlib/quickstart-0.1.jar

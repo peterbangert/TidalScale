@@ -49,7 +49,7 @@ public class WordCount {
 				.setBootstrapServers("kafka.default.svc.cluster.local:9092")
 				.setTopics("data")
 				.setGroupId("flink-group")
-				.setStartingOffsets(OffsetsInitializer.earliest())
+				.setStartingOffsets(OffsetsInitializer.latest())
 				.setValueOnlyDeserializer(new SimpleStringSchema())
 				.build();
 

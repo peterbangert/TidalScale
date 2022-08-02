@@ -5,7 +5,7 @@ metadata:
   labels:
     app: real-trace-generator
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: real-trace-generator
