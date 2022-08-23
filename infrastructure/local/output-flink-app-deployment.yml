@@ -5,7 +5,7 @@ metadata:
     deployment.kubernetes.io/revision: "1"
     prometheus.io/port: "9999"
     prometheus.io/scrape: "true"
-  creationTimestamp: "2022-07-06T11:35:18Z"
+  creationTimestamp: "2022-08-01T17:35:26Z"
   generation: 1
   labels:
     app: flink-cluster
@@ -13,8 +13,8 @@ metadata:
     type: flink-native-kubernetes
   name: flink-cluster
   namespace: default
-  resourceVersion: "44874"
-  uid: d590edcb-4683-4f30-9f50-ee901b644d6b
+  resourceVersion: "121052"
+  uid: 6bb246b8-89a4-4c58-baac-f78103b38ba3
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -44,7 +44,7 @@ spec:
       - args:
         - bash
         - -c
-        - kubernetes-jobmanager.sh kubernetes-session
+        - kubernetes-jobmanager.sh kubernetes-application
         command:
         - /docker-entrypoint.sh
         env:
@@ -53,8 +53,8 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.podIP
-        image: eu.gcr.io/msc-thesis-354309/flink-engine-java11-1.0.0
-        imagePullPolicy: Always
+        image: eu.gcr.io/msc-thesis-354309/quickstart:latest
+        imagePullPolicy: IfNotPresent
         name: flink-main-container
         ports:
         - containerPort: 8081
@@ -68,11 +68,11 @@ spec:
           protocol: TCP
         resources:
           limits:
-            cpu: "3"
-            memory: 4Gi
+            cpu: "1"
+            memory: 1600Mi
           requests:
-            cpu: "3"
-            memory: 4Gi
+            cpu: "1"
+            memory: 1600Mi
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
@@ -98,20 +98,21 @@ spec:
           name: flink-config-flink-cluster
         name: flink-config-volume
 status:
+  availableReplicas: 1
   conditions:
-  - lastTransitionTime: "2022-07-06T11:35:18Z"
-    lastUpdateTime: "2022-07-06T11:35:18Z"
-    message: Deployment does not have minimum availability.
-    reason: MinimumReplicasUnavailable
-    status: "False"
+  - lastTransitionTime: "2022-08-01T17:35:28Z"
+    lastUpdateTime: "2022-08-01T17:35:28Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
     type: Available
-  - lastTransitionTime: "2022-07-06T11:45:19Z"
-    lastUpdateTime: "2022-07-06T11:45:19Z"
-    message: ReplicaSet "flink-cluster-59cc866744" has timed out progressing.
-    reason: ProgressDeadlineExceeded
-    status: "False"
+  - lastTransitionTime: "2022-08-01T17:35:26Z"
+    lastUpdateTime: "2022-08-01T17:35:28Z"
+    message: ReplicaSet "flink-cluster-64d857494d" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
     type: Progressing
   observedGeneration: 1
+  readyReplicas: 1
   replicas: 1
-  unavailableReplicas: 1
   updatedReplicas: 1

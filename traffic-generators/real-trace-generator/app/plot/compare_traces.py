@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
 
     real_trace_file = 'alibaba_5min.csv'
-    simulated_trace = 'alibaba_kafka_msg_in_mean_300.csv'
+    #simulated_trace = 'alibaba_kafka_msg_in_mean_300.csv'
+    #mean_factor = 360.0
+    simulated_trace = 'alibaba_kafka_msg_in_mean_108k.csv'
+    mean_factor = 1.0
 
     with open('../traces/'+ real_trace_file, 'r') as f:
         lines = f.readlines()
@@ -12,7 +15,7 @@ if __name__ == "__main__":
 
     with open('../traces/simulated-traces/' + simulated_trace, 'r') as f:
         lines = f.readlines()
-        y_sim = [float(x.split(',')[1].strip('\n')) * 360.0 for x in lines[1:]]
+        y_sim = [float(x.split(',')[1].strip('\n')) * mean_factor for x in lines[1:]]
 
     filename = 'alibaba_real_trace_vs_simulated_trace.png'
     y_real = y_real[0:len(y_sim)]
@@ -40,7 +43,7 @@ if __name__ == "__main__":
     plt.ylabel('Real Error Normalized to Mean')
     plt.xlabel('Time (5 Minute Intervals)')
     
-    plt.suptitle("Alibaba Real Trace vs Simulated Trace")
+    plt.suptitle("Alibaba Real Trace vs Simulated Trace with Remote Trace Topic")
     plt.legend()
 
     
