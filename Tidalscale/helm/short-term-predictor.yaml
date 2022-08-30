@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: short-term-predictor-deployment
+  labels:
+    app: short-term-predictor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: short-term-predictor
+  template:
+    metadata:
+      labels:
+        app: short-term-predictor
+    spec:
+      containers:
+      - name: short-term-predictor
+        image: eu.gcr.io/msc-thesis-354309/short-term-predictor
+        ports:
+        - containerPort: 80
