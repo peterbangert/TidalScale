@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     init_logger()
     parser = argparse.ArgumentParser(description='Traffic Generator')
-    parser.add_argument('-t','--trace', default='alibaba', help=f'Load Trace model to use for traffic generator ' \
+    parser.add_argument('-t','--trace', default=config.DEFAULT_TRACE_FILE, help=f'Load Trace model to use for traffic generator ' \
                                                                 f'Possible Traces Include {sources}')
     parser.add_argument('-j','--job',default='WordCount',help='The processing job used by DSP system')
     parser.add_argument('-l','--local',action='store_true',help='Run traffic generator locally, use local kafka broker')

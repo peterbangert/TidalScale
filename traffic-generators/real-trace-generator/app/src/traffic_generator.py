@@ -38,7 +38,7 @@ class TrafficGenerator:
             msg_count += 1
 
             # Increment Trace step 5 Minutes
-            if datetime.now() >= trace_reader.string_to_datetime(trace_reader.get_next_trace()[0]):
+            if datetime.now() >= trace_reader.string_to_datetime(trace_reader.get_next_trace()['timestamp']):
                 trace_reader.increment_trace()
                 trace_arr = trace_reader.get_per_second_trace()
                 trace_index = 0

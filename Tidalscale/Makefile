@@ -26,16 +26,16 @@ deploy:
 	${MAKE} apply
 
 build:
-	cd long-term-predictor; docker build -t eu.gcr.io/msc-thesis-354309/long-term-predictor .
-	cd short-term-predictor; docker build -t eu.gcr.io/msc-thesis-354309/short-term-predictor . 
-	cd metrics-reporter; docker build -t eu.gcr.io/msc-thesis-354309/metrics-reporter .
-	cd autoscaling-controller; docker build -t eu.gcr.io/msc-thesis-354309/autoscaling-controller .
+	cd long-term-predictor; docker build -t eu.gcr.io/tidalscale-thesis/long-term-predictor .
+	cd short-term-predictor; docker build -t eu.gcr.io/tidalscale-thesis/short-term-predictor . 
+	cd metrics-reporter; docker build -t eu.gcr.io/tidalscale-thesis/metrics-reporter .
+	cd autoscaling-controller; docker build -t eu.gcr.io/tidalscale-thesis/autoscaling-controller .
 
 push:
-	docker push eu.gcr.io/msc-thesis-354309/long-term-predictor
-	docker push eu.gcr.io/msc-thesis-354309/short-term-predictor
-	docker push eu.gcr.io/msc-thesis-354309/metrics-reporter
-	docker push eu.gcr.io/msc-thesis-354309/autoscaling-controller
+	docker push eu.gcr.io/tidalscale-thesis/long-term-predictor
+	docker push eu.gcr.io/tidalscale-thesis/short-term-predictor
+	docker push eu.gcr.io/tidalscale-thesis/metrics-reporter
+	docker push eu.gcr.io/tidalscale-thesis/autoscaling-controller
 
 
 install:

@@ -1,22 +1,2 @@
-# Real Trace Traffic Generator
+# Metrics Reporter
 
-
-## Quick Start
-
-- Deploy traffic generator
-
-```
-make deploy
-```
-
-- Rollout new changes
-
-```
-make rollout
-```
-
-- Destroy Traffic Generator Deployment
-
-```
-make destroy
-```

@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: metrics-reporter
-        image: eu.gcr.io/msc-thesis-354309/metrics-reporter
+        image: eu.gcr.io/tidalscale-thesis/metrics-reporter
         ports:
         - containerPort: 80

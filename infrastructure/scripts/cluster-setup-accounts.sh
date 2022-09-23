@@ -3,12 +3,12 @@
 set -eu
 set -x
 
-project="msc-thesis-354309"
+project="tidalscale-thesis"
 terraform_user="terraform"
 terraform_service_account="$terraform_user@$project.iam.gserviceaccount.com"
 
 # Authenticate through gcloud if no gcp service account is used:
-if [ "$(gcloud config get-value account)" = "" ]; then
+if [ "$(gcloud config get-value account)" = "" ] || ! grep $project ~/.config/gcloud/application_default_credentials.json ; then
 	gcloud auth application-default login
 fi
 

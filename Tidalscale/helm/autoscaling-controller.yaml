@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: autoscaling-controller
-        image: eu.gcr.io/msc-thesis-354309/autoscaling-controller
+        image: eu.gcr.io/tidalscale-thesis/autoscaling-controller
         ports:
         - containerPort: 80

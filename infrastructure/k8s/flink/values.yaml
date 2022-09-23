@@ -5,7 +5,7 @@
 replicaCount: 1
 
 #image:
-#  repository: eu.gcr.io/msc-thesis-354309
+#  repository: eu.gcr.io/tidalscale-thesis
 #  pullPolicy: Latest
 #  # Overrides the image tag whose default is the chart appVersion.
 #  tag: "quickstart"

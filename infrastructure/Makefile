@@ -7,14 +7,12 @@ SHELL := /bin/bash
 ##
 
 HELM_DIR=	k8s/helm
-PROJECT_NAME= msc-thesis-354309
+PROJECT_NAME= tidalscale-thesis
 
 cluster-create:
 	./scripts/cluster-setup-accounts.sh
 	./scripts/cluster-setup-storage.sh
 	./scripts/cluster-terraform.sh
-	${MAKE} flink-build-docker-image
-	${MAKE} flink-push-docker-image
 
 cluster-destroy:
 	cd k8s/terraform && terraform destroy -auto-approve
@@ -99,6 +97,9 @@ flink-application-mode-install: ${FLINK_DIR}
 	export FLINK_DIR="${FLINK_DIR}" && \
 	export FLINK_DOCKER_IMAGE="${FLINK_DOCKER_IMAGE}" && \
 	./scripts/flink-application-mode-install.sh
+
+flink-ractive-hpa-deploy:
+	cd k8s/flink/ && helm install flink .
 
 
 ##

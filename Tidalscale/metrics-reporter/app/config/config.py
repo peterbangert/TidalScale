@@ -8,32 +8,28 @@ LOGGER = {
 KAFKA = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
-    "topic": 'data',
-    "trace_topic": 'trace'
+    "topic": 'metrics'
 }
 
 KAFKA_LOCAL = {
     "broker_ip": "localhost",
     "port": 9092,
-    "topic": 'data'
+    "topic": 'metrics'
 }
 
-TRACE_FILES = [
-    'alibaba',
-    'avazu',
-    'google',
-    'horton',
-    'IoT',
-    'retailrocket',
-    'taxi',
-    'wiki_de',
-    'wiki_en'
-    ]
+PROMETHEUS = {
+    "query_path": "/api/v1/query",
+    "url": "http://35.198.98.152:30090"
+}
 
-# Average message per second trace is 108k, configured average rate will scale trace files
-TRACE_GENERATOR = {
-    'avg_msg_per_second' : 100.0,
-    'mean' : 108000.0,
-    'std_deviation': 0.1,
-    'seconds_between_traces': 60  # 300 is 5 minutes
+PROMETHEUS_QUERIES = {
+    "cpuUsage": "sum(flink_taskmanager_Status_JVM_CPU_Load) / sum(flink_jobmanager_numRegisteredTaskManagers)",
+    "kafkaLag": "sum(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max) / count(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max)",
+    "maxJobLatency": "max(flink_taskmanager_job_latency_source_id_operator_id_operator_subtask_index_latency)",
+    "memUsage": "sum(flink_taskmanager_Status_JVM_Memory_Heap_Used / flink_taskmanager_Status_JVM_Memory_Heap_Committed) / sum(flink_jobmanager_numRegisteredTaskManagers)",
+    "flinkNumRecordsOutPerSecond":"flink_taskmanager_job_task_numRecordsOutPerSecond",
+    "kafkaMessagesPerSecond":"sum by (topic) (rate(kafka_server_brokertopicmetrics_messagesinpersec_count[2m]))",
+    "flinkNumOfTaskManagers":"flink_jobmanager_numRegisteredTaskManagers",
+    "flinkNumRecordsIn": "sum by (job_name) (rate(flink_taskmanager_job_task_numRecordsIn[2m]))",
+    "flinkIngestionRate": "sum(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_consumed_rate)"
 }

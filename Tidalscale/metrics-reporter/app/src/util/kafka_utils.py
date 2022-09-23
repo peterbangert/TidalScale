@@ -1,5 +1,5 @@
 from confluent_kafka import Producer as ConfluentProducer
-from confluent_kafka.admin import AdminClient
+from confluent_kafka.admin import AdminClient, NewTopic
 import json
 from config import config
 
@@ -51,3 +51,17 @@ def delete_topic(bootstrap_server, topic):
             logger.info(f"Failed to delete topic {tpc}: {e}")
 
 
+def create_topic(bootstrap_server, topic):
+    logger.info(f"Creating Topic: {topic}")
+    
+    try:
+        kafka_admin = AdminClient({'bootstrap.servers': bootstrap_server})
+    except:
+        logger.error(f'Error occured connecting to kafka broker. Address may be wrong {bootstrap_server}')
+
+    try:
+        topic_list = []
+        topic_list.append(NewTopic(topic, 1, 1))
+        kafka_admin.create_topics(topic_list)
+    except Exception as e:
+        logger.info(f"Failed to create topic {topic}: {e}")

@@ -15,7 +15,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: jobmanager
-          image: eu.gcr.io/msc-thesis-354309/quickstart:latest
+          image: eu.gcr.io/tidalscale-thesis/quickstart:latest
           env:
           args: ["standalone-job", "--job-classname", "org.myorg.quickstart.WordCount"] # optional arguments: ["--job-id", "<job id>", "--fromSavepoint", "/path/to/savepoint", "--allowNonRestoredState"]
           ports:

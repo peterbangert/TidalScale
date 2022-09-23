@@ -5,8 +5,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 from config import config
 import fileinput
-from src.traffic_generator import TrafficGenerator
-from src.util import create_trace_topic
+from src.long_term_predictor import LongTermPredictionModel
+from src.util import kafka_utils
 
 
 def init_logger():
@@ -44,29 +44,17 @@ if __name__ == "__main__":
         Either stdin or -i|--infile can be read as input
     '''
 
-    sources = ['alibaba','avazu','google','horton','IoT','retailrocket','taxi','wiki_de','wiki_en']
-
 
     init_logger()
     parser = argparse.ArgumentParser(description='Traffic Generator')
-    parser.add_argument('-t','--trace', default='alibaba', help=f'Load Trace model to use for traffic generator ' \
-                                                                f'Possible Traces Include {sources}')
-    parser.add_argument('-j','--job',default='WordCount',help='The processing job used by DSP system')
+
     parser.add_argument('-l','--local',action='store_true',help='Run traffic generator locally, use local kafka broker')
     parser.add_argument('-b','--broker',help='<Address:Port> of kafka broker, default is config.py')
-    parser.add_argument('-ct','--create-trace-topic',action='store_true',help='Initialize the Trace topic to current time')
     args = parser.parse_args()
 
-    if args.create_trace_topic:
-        create_trace_topic.create_trace_topic(args)
-        exit()
+    bootstrap_server = kafka_utils.get_broker(args)
+    if not kafka_utils.check_topic_exists(bootstrap_server, config.KAFKA['lt_prediction']):
+        kafka_utils.create_topic(bootstrap_server,config.KAFKA['lt_prediction'],config.KAFKA['lt_prediction_partitions'])
 
-    if args.trace is not None and args.trace not in sources:
-        raise ValueError(f'Trace Argument non existent, trace file {args.trace} does not exist, please refer run.py -h for more info')
-
-
-    # Read from stdin if input file not given as argument
-    # infile = args.infile if args.infile else fileinput.input()
-
-    traffic_generator = TrafficGenerator(args)
-    traffic_generator.run()
+    prediction_aggregator = LongTermPredictionModel(args)
+    prediction_aggregator.run()

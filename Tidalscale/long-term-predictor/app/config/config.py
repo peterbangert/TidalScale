@@ -8,32 +8,29 @@ LOGGER = {
 KAFKA = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
-    "topic": 'data',
-    "trace_topic": 'trace'
+    "metric_topic": 'metrics',
+    "st_prediction": "st_prediction",
+    "lt_prediction": "lt_prediction",
+    "agg_prediction": "agg_prediction",
+    "lt_prediction_partitions": 1
 }
 
 KAFKA_LOCAL = {
     "broker_ip": "localhost",
     "port": 9092,
-    "topic": 'data'
+    "metric_topic": 'metrics',
+    "st_prediction": "st_prediction",
+    "lt_prediction": "lt_prediction",
+    "agg_prediction": "agg_prediction"
 }
 
-TRACE_FILES = [
-    'alibaba',
-    'avazu',
-    'google',
-    'horton',
-    'IoT',
-    'retailrocket',
-    'taxi',
-    'wiki_de',
-    'wiki_en'
-    ]
-
-# Average message per second trace is 108k, configured average rate will scale trace files
-TRACE_GENERATOR = {
-    'avg_msg_per_second' : 100.0,
-    'mean' : 108000.0,
-    'std_deviation': 0.1,
-    'seconds_between_traces': 60  # 300 is 5 minutes
+CONFIG = {
+    "rescale_window": 180, # seconds
+    "metric_frequency": 2, # seconds
+    'forecast_horizon': 3, # number of predictions in the future
+    'traces_per_hour': 12,
+    'trace_history_duration_hours': 14, # 3 days / 5
+    'time_interval' : 60 # 300 for normal trace
 }
+
+
