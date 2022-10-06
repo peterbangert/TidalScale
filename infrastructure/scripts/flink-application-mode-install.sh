@@ -40,5 +40,5 @@ fi
 	-Dkubernetes.config.file=/home/pbangert/.kube/config \
 	-Dkubernetes.service-account=flink-service-account \
 	-Dkubernetes.cluster-id=flink-cluster \
-	-Dkubernetes.container.image=eu.gcr.io/msc-thesis-354309/quickstart:latest \
+	-Dkubernetes.container.image=eu.gcr.io/tidalscale-thesis/quickstart:latest \
 	local:///opt/flink/usrlib/quickstart-0.1.jar

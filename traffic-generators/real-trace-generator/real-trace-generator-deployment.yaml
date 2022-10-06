@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: real-trace-generator
-        image: eu.gcr.io/msc-thesis-354309/real-trace-generator
+        image: eu.gcr.io/tidalscale-thesis/real-trace-generator
         ports:
         - containerPort: 80

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-trace-generator-deployment
+  labels:
+    app: real-trace-generator
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: real-trace-generator
+  template:
+    metadata:
+      labels:
+        app: real-trace-generator
+    spec:
+      containers:
+      - name: real-trace-generator
+        image: eu.gcr.io/tidalscale-thesis/real-trace-generator
+        ports:
+        - containerPort: 80

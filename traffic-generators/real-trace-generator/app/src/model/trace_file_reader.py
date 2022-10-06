@@ -32,13 +32,10 @@ class TraceFileReader:
         return self.trace_file.readline().split(",")
 
     def get_per_second_trace(self):
-        curr_trace_scaled = (float(self.current_trace[1]) / config.config.TRACE_GENERATOR['mean']) * config.config.TRACE_GENERATOR['avg_msg_per_second']
-        next_trace_scaled = (float(self.next_trace[1]) / config.config.TRACE_GENERATOR['mean']) * config.config.TRACE_GENERATOR['avg_msg_per_second']
+        curr_trace_scaled = float(self.current_trace[1])
+        next_trace_scaled = float(self.next_trace[1])
         #variance = abs(curr_trace_scaled - next_trace_scaled)
         x = [1,config.config.TRACE_GENERATOR['seconds_between_traces']] # 300 seconds in 5 minutes
         x_interp = range(1,config.config.TRACE_GENERATOR['seconds_between_traces'])
         self.increment_trace()
         return np.interp(x_interp, x, [curr_trace_scaled,next_trace_scaled])
-
-
-
