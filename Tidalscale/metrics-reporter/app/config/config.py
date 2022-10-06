@@ -19,7 +19,7 @@ KAFKA_LOCAL = {
 
 PROMETHEUS = {
     "query_path": "/api/v1/query",
-    "url": "http://35.198.98.152:30090"
+    "url": "http://34.89.176.147:30090"
 }
 
 PROMETHEUS_QUERIES = {

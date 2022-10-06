@@ -19,8 +19,13 @@ class Database():
                 f"password='{config.POSTGRES['password']}'")
             self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.conn.cursor()
-            self.clear_database()
-            self.create_database()
+            
+            if not self.db_exists():
+                logger.info(f"Database {config.POSTGRES['database']} does not exist. Creating")
+                self.create_database()
+            else:
+                logger.info(f"Database {config.POSTGRES['database']} exists")
+
             self.conn = psycopg2.connect(
                 f"dbname='{config.POSTGRES['database']}' "
                 f"user='{config.POSTGRES['user']}' "
@@ -28,11 +33,26 @@ class Database():
                 f"password='{config.POSTGRES['password']}'")
             self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.conn.cursor()
-            self.create_table()
+            
+            if not self.table_exists():
+                logger.info(f"Table {config.POSTGRES['table']} does not exist. Creating")
+                self.create_table()
+            else:
+                logger.info(f"Table {config.POSTGRES['table']} exists")
+
         except Exception as e:
             logger.error(f'Error occured connecting to Postgres Database. Credentials may be wrong. Stack Trace:')
             logger.error(f"{e}")
             exit()
+
+    def table_exists(self):
+        self.cursor.execute(f"SELECT EXISTS(SELECT * FROM information_schema.tables where table_name = '{config.POSTGRES['table']}');")
+        return self.cursor.fetchone()[0]
+
+    def db_exists(self):
+        self.cursor.execute("SELECT datname FROM pg_database;")
+        db_list = self.cursor.fetchall()
+        return (config.POSTGRES['database'],) in db_list
 
     def update_db(self, current_load):
         return 0
@@ -54,9 +74,13 @@ class Database():
         self.cursor.execute(config.POSTGRES['update'], (max_rate,id))
 
     def check_max_rate(self, id):
-        self.cursor.execute(config.POSTGRES['check_max_rate'], (str(id)))
-        result = self.cursor.fetchall()
-        return None if len(result) == 0 else result[0][0]
+        try:
+            self.cursor.execute(config.POSTGRES['check_max_rate'], (str(id)))
+            result = self.cursor.fetchall()
+            return None if len(result) == 0 else result[0][0]
+        except Exception as e:
+            logger.info(f"Querying Database failed, exception {e}")
+            return None
 
     def get_configurations(self):
         self.cursor.execute(config.POSTGRES["select_all"])

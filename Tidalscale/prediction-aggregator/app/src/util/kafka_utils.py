@@ -1,5 +1,5 @@
 from confluent_kafka import Producer as ConfluentProducer
-from confluent_kafka.admin import AdminClient
+from confluent_kafka.admin import AdminClient, NewTopic
 import json
 from config import config
 
@@ -50,4 +50,26 @@ def delete_topic(bootstrap_server, topic):
         except Exception as e:
             logger.info(f"Failed to delete topic {tpc}: {e}")
 
+
+
+def create_topic(bootstrap_server, topic, partitions):
+    logger.info(f"Creating Topic: {topic} with {partitions} partitions")
+
+    try:
+        kafka_admin = AdminClient({'bootstrap.servers': bootstrap_server})
+    except:
+        logger.error(f'Error occured connecting to kafka broker. Address may be wrong {bootstrap_server}')
+
+    fs = kafka_admin.create_topics([NewTopic(topic, num_partitions=1)])
+
+    # Wait for operation to finish.
+    # Timeouts are preferably controlled by passing request_timeout=15.0
+    # to the create_topics() call.
+    # All futures will finish at the same time.
+    for topic, f in fs.items():
+        try:
+            f.result()  # The result itself is None
+            logger.info(f"Topic {topic} created")
+        except Exception as e:
+            logger.info(f"Failed to create topic {topic}: {e}")
 

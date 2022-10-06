@@ -30,7 +30,8 @@ CONFIG = {
     'forecast_horizon': 3, # number of predictions in the future
     'traces_per_hour': 12,
     'trace_history_duration_hours': 14, # 3 days / 5
-    'time_interval' : 60 # 300 for normal trace
+    'time_interval' : 60, # 300 for normal trace
+    'time_fmt' : '%Y-%m-%d %H:%M:%S.%f'
 }
 
 

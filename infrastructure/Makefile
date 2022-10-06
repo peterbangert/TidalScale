@@ -98,9 +98,17 @@ flink-application-mode-install: ${FLINK_DIR}
 	export FLINK_DOCKER_IMAGE="${FLINK_DOCKER_IMAGE}" && \
 	./scripts/flink-application-mode-install.sh
 
-flink-ractive-hpa-deploy:
-	cd k8s/flink/ && helm install flink .
+flink-reactive-hpa-deploy:
+	cd k8s/flink-reactive-hpa/ && helm install flink-reactive-hpa .
 
+flink-reactive-hpa-destroy:
+	helm uninstall flink-reactive-hpa
+
+flink-reactive-deploy:
+	cd k8s/flink-reactive/ && helm install flink-reactive .
+
+flink-reactive-destroy:
+	helm uninstall flink-reactive
 
 ##
 #	POD MANAGEMENT

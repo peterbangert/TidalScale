@@ -5,6 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from config import config
 import fileinput
+from src.util import kafka_utils
 from src.prediction_aggregator import PredictionAggregator
 
 
@@ -52,6 +53,9 @@ if __name__ == "__main__":
     parser.add_argument('-b','--broker',help='<Address:Port> of kafka broker, default is config.py')
     args = parser.parse_args()
 
+    bootstrap_server = kafka_utils.get_broker(args)
+    if not kafka_utils.check_topic_exists(bootstrap_server, config.KAFKA['agg_prediction']):
+        kafka_utils.create_topic(bootstrap_server,config.KAFKA['agg_prediction'],config.KAFKA['agg_prediction_partitions'])
 
     prediction_aggregator = PredictionAggregator(args)
     prediction_aggregator.run()

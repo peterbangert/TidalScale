@@ -54,7 +54,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     bootstrap_server = kafka_utils.get_broker(args)
-    if not kafka_utils.check_topic_exists(config.KAFKA['st_prediction']):
+    if not kafka_utils.check_topic_exists(bootstrap_server, config.KAFKA['st_prediction']):
         kafka_utils.create_topic(bootstrap_server,config.KAFKA['st_prediction'],config.KAFKA['st_prediction_partitions'])
 
 

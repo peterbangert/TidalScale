@@ -39,6 +39,11 @@ class PerformanceMeter:
 
     def process_metrics(self, metric_report):
 
+        for x in ['cpuUsage','flinkNumOfTaskManagers','kafkaLag','memUsage','flinkIngestionRate']:
+            if not bool(metric_report[x]):
+                logger.info("No data")
+                return 0
+
         # Gather Metrics
         cpu_usage = float(metric_report['cpuUsage'][0]['value'][1])
         taskmanagers = int(metric_report['flinkNumOfTaskManagers'][0]['value'][1])

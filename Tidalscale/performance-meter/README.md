@@ -20,6 +20,6 @@ psql -h localhost -U postgres
 
 ```
 export PGPASSWORD='admin'
-psql -U postgres -d tidalscale -c 'select * from configurations;'
+psql -h localhost -U postgres -d tidalscale -c 'select * from configurations;'
 
 ```

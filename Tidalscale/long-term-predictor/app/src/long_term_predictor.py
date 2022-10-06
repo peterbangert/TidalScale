@@ -38,7 +38,7 @@ class LongTermPredictionModel:
         self.prediction_producer = PredictionProducer(args)
         self.prediction_model = TripleExponentialSmoothing()
         self.current_time = datetime.utcnow()
-        self.time_fmt = '%Y-%m-%d %H:%M:%S.%f'
+        self.time_fmt = config.CONFIG['time_fmt']
 
 
 
@@ -65,7 +65,7 @@ class LongTermPredictionModel:
             for item in metric_report['kafkaMessagesPerSecond']:
                 if item['metric']['topic'] == "data":
                     msg_per_second = float(item['value'][1])
-                    msg_timestamp = datetime.strptime(item['timestamp'],self.time_fmt)
+                    msg_timestamp = datetime.strptime(metric_report['timestamp'],self.time_fmt)
 
         # Check for Null Values
         if math.isnan(msg_per_second) or msg_per_second == '' or msg_per_second == 0:
@@ -86,6 +86,9 @@ class LongTermPredictionModel:
                 msg_timestamp = self.trace_history[-1][0] + timedelta(seconds=config.CONFIG['time_interval'])
                 self.trace_history.append((msg_timestamp,msg_per_second))
 
+            else:
+                return 0
+
         else:
             return 0
 
@@ -97,6 +100,10 @@ class LongTermPredictionModel:
 
         # 2 Season Cycles must be present in data to predict model on
         if len(self.trace_history) < 24 * config.CONFIG['traces_per_hour'] * 2:
+            return 0
+
+        # Dont create prediction if last measurement too old
+        if msg_timestamp < datetime.utcnow() - timedelta(seconds=config.CONFIG['time_interval']):
             return 0
 
         pd_trace = pd.DataFrame(self.trace_history, columns=['date','load'])

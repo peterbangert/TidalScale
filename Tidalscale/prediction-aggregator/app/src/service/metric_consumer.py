@@ -18,7 +18,7 @@ class MetricConsumer:
                 config.KAFKA['metric_topic'],
                 bootstrap_servers=[bootstrap_server],
                 value_deserializer=lambda m: json.loads(m.decode('ascii')),
-                auto_offset_reset='latest')
+                auto_offset_reset='earliest')
         except:
             logger.error(f'Error occured connecting to kafka broker. Address may be wrong {bootstrap_server}')
 

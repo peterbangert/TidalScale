@@ -19,6 +19,12 @@ redeploy:
 	${MAKE} push
 	${MAKE} apply
 
+delete-all-topics:
+	${MAKE} kafka-delete-trace-topic
+	${MAKE} kafka-delete-data-topic
+	${MAKE} kafka-delete-metrics-topic
+	${MAKE} kafka-delete-agg-prediction-topic
+
 build:
 	docker build -t eu.gcr.io/tidalscale-thesis/real-trace-generator .
 
@@ -38,6 +44,12 @@ destroy:
 
 kafka-delete-trace-topic:
 	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic trace"
+
+kafka-delete-metrics-topic:
+	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic metrics"
+
+kafka-delete-agg-prediction-topic:
+	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic agg_prediction"
 
 kafka-create-trace-topic:
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \

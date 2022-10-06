@@ -40,11 +40,11 @@ DEFAULT_TRACE_FILE = "retailrocket"
 
 # Average message per second trace is 108k, configured average rate will scale trace files
 TRACE_GENERATOR = {
-    'avg_msg_per_second' : 15000.0,
+    'avg_msg_per_second' : 21600.0,
     'mean' : 108000.0,
     'std_deviation': 0.1,
     'seconds_between_traces': 60,  # 300 is 5 minutes
     "variance": 3,
-    "lt_predictor_training_period": 14, # hours
+    "lt_predictor_training_period": 20, # hours
     "pods": 5
 }

@@ -11,7 +11,8 @@ KAFKA = {
     "metric_topic": 'metrics',
     "st_prediction": "st_prediction",
     "lt_prediction": "lt_prediction",
-    "agg_prediction": "agg_prediction"
+    "agg_prediction": "agg_prediction",
+    "st_prediction_partitions" :1
 }
 
 KAFKA_LOCAL = {
@@ -20,8 +21,7 @@ KAFKA_LOCAL = {
     "metric_topic": 'metrics',
     "st_prediction": "st_prediction",
     "lt_prediction": "lt_prediction",
-    "agg_prediction": "agg_prediction",
-    "st_prediction_partitions" :1
+    "agg_prediction": "agg_prediction"
 }
 
 CONFIG = {
