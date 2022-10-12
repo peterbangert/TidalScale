@@ -14,7 +14,7 @@ make all
 
 
 <p align="center">
-  <img width="900"  src="./img/tidalscale_implementation.png">
+  <img width="900"  src="../docs/img/tidalscale_implementation.png">
 </p>
 
 ## Description
