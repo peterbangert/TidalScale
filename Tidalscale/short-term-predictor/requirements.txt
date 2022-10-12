@@ -1,4 +1,0 @@
-confluent_kafka==1.9.0
-matplotlib==3.5.2
-numpy==1.22.4
-pandas==1.4.2

@@ -19,11 +19,7 @@ on-premise, the Helm charts can be used to do the deployments of the application
 
 ### 2. Deploying the Applicatoins (hdfs,flink,kafka,redis,prometheus,grafana)
 
- - run `make services-install`.
-
-    - `make hdfs-install`
-    - `make mpds-install`
-    - `make flink-install`
+ - run `mpds-install`
 
 ### 3. Access Grafana
 
@@ -41,17 +37,37 @@ make grafana-get-web-ui
 
 ### 4. Setup Flink
 
-- Acces Flink UI
+#### 4.1 Deploy Flink in Application Mode
+
+> See [Flink Deployment Modes](https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/overview/) for more details 
+
+- Deploy Flink (with or without horizontal pod autoscaling) 
 
 ```
-make flink-get-web-ui
+make flink-reactive-hpa-deploy
+make flink-reactive-deploy
 ```
+
+
+#### 4.2 Deploy Flink in Session Mode
+
+ - Deploy Flink in Session Mode
+
+```
+make flink-install
+```
+
+ - Expose the web-ui
+
+ ```
+ make flink-get-web-ui
+ ```
 
 - Package Flink Job 
 
   - Visit [flink-jobs](../flink-jobs/) to package flink job into a `.jar`
 
-- Submit Flink Job Arguments
+- Submit Flink Job
 
   - Parallelism: `1`
   - Program Arguments: `--statebackend.default false --checkpoint hdfs://hadoop-hdfs-namenode:8020/flink/checkpoints --checkpoint.interval 600000`
