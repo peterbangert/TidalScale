@@ -1,26 +1,26 @@
 # Tidalscale
 
-> Proactive Autoscaler for cloud based Distributed Stream Processing Engines
+> Predictive Autoscaler for cloud based Distributed Stream Processing Engines
 
 ## Overall system design
 
 
 <p align="center">
-  <img width="900" height="300" src="docs/img/Paper_Architecture-Page.png">
+  <img width="900"  src="docs/img/Paper_Architecture-Page.png">
 </p>
 
 
 ## Description
 
-TidalScale, a predictive distributed stream processing autoscaler that proposes a refined and simplified model for managing DSP resources at runtime. Tidalscale uses aggregated linear short term and neural network long term predictions to anticipate future load. This enables it to choose resource efficient configurations of the DSP at runtime while maintaining quality of service (QoS). We show that TidalScale is
-capable of efficiently adapting DSP resources to varying loads.
+TidalScale, a predictive distributed stream processing autoscaler that proposes a refined and simplified model for managing DSP resources at runtime. Tidalscale uses aggregated short term and long term prediction model to anticipate future load. This enables it to choose resource efficient configurations of the DSP at runtime while maintaining quality of service (QoS). We show that TidalScale is capable of efficiently adapting DSP resources to varying loads.
 
 Tidalscale strives to provide a platform agnostic autoscaling solution by analyzing metrics exposed from the container orchestrator system and the intermediate message brokering system. 
 
 ## Quick Start
 
 1. Setup example [Infrastructure](./infrastructure/)
-2. Start [Tidalscale](./Tidalscale/)
+2. Deploy a [Traffic Generator](./traffic-generators)
+2. Start [Tidalscale](./TidalScale/)
 
 
 ### System Architecture
@@ -41,8 +41,8 @@ Tidalscale requires interaction with various compoenents.
  
 There are 2 Kafka topics used by the autoscaling system:
 
-- `Metric` for message rate metrics
-- `Prediction` for output results of the prediction models
+- `metrics` for message rate metrics
+- `agg_prediction` for output results of the prediction models
 
 #### Metrics
 
@@ -172,12 +172,4 @@ The response:
 ```
 </details>
 
-The following metrics are potentially interesting, but are not available available at this moment in Prometheus:
-- Network in/out (to do)
-- CPU Utilization (to do, probably available via Kubernetes API's)
-- Memory Usage (to do, probably avialable via Kubernetes API's)
 
-
-#### Prediction models
-
-There are two prediction models available at the moment: a long-term one, and a short-term one. Both models are predicting the load based on the Kafka message rates.
