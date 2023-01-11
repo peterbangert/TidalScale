@@ -1,26 +1,26 @@
-LOGGER = {
+logger = {
     # Log console output to file?
     "log_to_file": False,
     # The logging file path for the python logger
-    "log_path": "/tmp/traffic_generator.log",
+    "log_path": "/tmp/app.log",
 }
 
-KAFKA = {
+kafka = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
     "metric_topic": 'metrics',
-    "agg_prediction": "agg_prediction",
-    "agg_prediction_partitions": 1
+    "agg_prediction_topic": "agg_prediction",
+    "agg_prediction_topic_partitions": 1
 }
 
-KAFKA_LOCAL = {
+kafka_local = {
     "broker_ip": "localhost",
     "port": 9092,
     "metric_topic": 'metrics',
-    "agg_prediction": "agg_prediction"
+    "agg_prediction_topic": "agg_prediction"
 }
 
-CONFIG = {
+config = {
     "rescale_window": 180,
     "metric_frequency": 2,
     "lt_prediction_frequency": 60, # 300 for normal trace

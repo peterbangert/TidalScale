@@ -1,0 +1,54 @@
+{{- if .Values.autoscalingcontroller.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoscaling-controller-deployment
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      serviceAccountName: tidalscale-autoscaler-admin-role
+      containers:
+      - name: autoscaling-controller
+        image: eu.gcr.io/{{ .Values.global.projectId }}/autoscaling-controller
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            items:
+              - key: config.yaml
+                path: config.yaml
+              - key: autoscaling-controller-config.yaml
+                path: autoscaling-controller-config.yaml
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tidalscale-autoscaler-admin-role
+subjects:
+  - kind: ServiceAccount
+    name: tidalscale-autoscaler-admin-role
+    namespace: ind-iv
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tidalscale-autoscaler-admin-role
+{{- end }}

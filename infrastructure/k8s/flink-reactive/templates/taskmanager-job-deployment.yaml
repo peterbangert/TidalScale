@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: taskmanager
-        image: eu.gcr.io/tidalscale-thesis/quickstart:latest
+        image: {{ .Values.flinkJob.image }}
         env:
         args: ["taskmanager"]
         ports:

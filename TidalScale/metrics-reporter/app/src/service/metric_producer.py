@@ -21,5 +21,5 @@ class MetricProducer:
 
 
     def publish(self, message):
-        self.producer.send(config.KAFKA['topic'], message)
+        self.producer.send(config.kafka['metric_topic'], message)
 

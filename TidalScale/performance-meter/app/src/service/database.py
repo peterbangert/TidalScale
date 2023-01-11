@@ -14,31 +14,34 @@ class Database():
 
         try:
             self.conn = psycopg2.connect(
-                f"user='{config.POSTGRES['user']}' "
-                f"host='{config.POSTGRES['host']}' "
-                f"password='{config.POSTGRES['password']}'")
+                f"user='{config.postgres['user']}' "
+                f"host='{config.postgres['host']}' "
+                f"password='{config.postgres['password']}'")
             self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.conn.cursor()
             
             if not self.db_exists():
-                logger.info(f"Database {config.POSTGRES['database']} does not exist. Creating")
+                logger.info(f"Database {config.postgres['database']} does not exist. Creating")
                 self.create_database()
             else:
-                logger.info(f"Database {config.POSTGRES['database']} exists")
+                if args.clear:
+                    self.clear_database()
+                    self.create_database()
+                logger.info(f"Database {config.postgres['database']} exists")
 
             self.conn = psycopg2.connect(
-                f"dbname='{config.POSTGRES['database']}' "
-                f"user='{config.POSTGRES['user']}' "
-                f"host='{config.POSTGRES['host']}' "
-                f"password='{config.POSTGRES['password']}'")
+                f"dbname='{config.postgres['database']}' "
+                f"user='{config.postgres['user']}' "
+                f"host='{config.postgres['host']}' "
+                f"password='{config.postgres['password']}'")
             self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             self.cursor = self.conn.cursor()
             
             if not self.table_exists():
-                logger.info(f"Table {config.POSTGRES['table']} does not exist. Creating")
+                logger.info(f"Table {config.postgres['table']} does not exist. Creating")
                 self.create_table()
             else:
-                logger.info(f"Table {config.POSTGRES['table']} exists")
+                logger.info(f"Table {config.postgres['table']} exists")
 
         except Exception as e:
             logger.error(f'Error occured connecting to Postgres Database. Credentials may be wrong. Stack Trace:')
@@ -46,36 +49,36 @@ class Database():
             exit()
 
     def table_exists(self):
-        self.cursor.execute(f"SELECT EXISTS(SELECT * FROM information_schema.tables where table_name = '{config.POSTGRES['table']}');")
+        self.cursor.execute(f"SELECT EXISTS(SELECT * FROM information_schema.tables where table_name = '{config.postgres['table']}');")
         return self.cursor.fetchone()[0]
 
     def db_exists(self):
         self.cursor.execute("SELECT datname FROM pg_database;")
         db_list = self.cursor.fetchall()
-        return (config.POSTGRES['database'],) in db_list
+        return (config.postgres['database'],) in db_list
 
     def update_db(self, current_load):
         return 0
 
     def clear_database(self):
-        self.cursor.execute(f"DROP DATABASE IF EXISTS {config.POSTGRES['database']};")
+        self.cursor.execute(f"DROP DATABASE IF EXISTS {config.postgres['database']};")
 
     def create_database(self):
-        self.cursor.execute(f"CREATE DATABASE {config.POSTGRES['database']};")
+        self.cursor.execute(f"CREATE DATABASE {config.postgres['database']};")
 
     def create_table(self):
-        self.cursor.execute(f"{config.POSTGRES['table_schema']}")
+        self.cursor.execute(f"{config.postgres['table_schema']}")
 
-    def insert_performance(self, id, num_taskmanager_pods, max_rate, parallelism, restart_time=None, catchup_time=None, recovery_time=None):
-        self.cursor.execute(config.POSTGRES['insert'],
-                            (id, num_taskmanager_pods, max_rate, parallelism, restart_time, catchup_time, recovery_time))
+    def insert_performance(self, taskmanagers, cpu, parallelism, max_rate):
+        self.cursor.execute(config.postgres['insert'],
+                            (taskmanagers, cpu, parallelism, max_rate))
 
-    def update_performance(self, id, max_rate):
-        self.cursor.execute(config.POSTGRES['update'], (max_rate,id))
+    def update_performance(self, taskmanagers, cpu, max_rate):
+        self.cursor.execute(config.postgres['update'], (max_rate, taskmanagers, cpu))
 
-    def check_max_rate(self, id):
+    def check_max_rate(self, taskmanagers, cpu):
         try:
-            self.cursor.execute(config.POSTGRES['check_max_rate'], (str(id)))
+            self.cursor.execute(config.postgres['check_max_rate'], (str(taskmanagers),cpu))
             result = self.cursor.fetchall()
             return None if len(result) == 0 else result[0][0]
         except Exception as e:
@@ -83,5 +86,5 @@ class Database():
             return None
 
     def get_configurations(self):
-        self.cursor.execute(config.POSTGRES["select_all"])
+        self.cursor.execute(config.postgres["select_all"])
         return self.cursor.fetchall()

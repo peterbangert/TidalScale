@@ -3,7 +3,7 @@ from config import config
 from src.service.metric_consumer import MetricConsumer
 from src.service.database import Database
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import numpy as np
 import math
@@ -24,6 +24,7 @@ class PerformanceMeter:
         self.flink_ingestion_smoothed = []
         self.cpu_smoothed = []
         self.mem_smoothed = []
+        self.cooldown_timer = datetime.now() - timedelta(seconds=30)
 
     def run(self):
 
@@ -59,7 +60,42 @@ class PerformanceMeter:
         # Check for Nulls
         for x in [cpu_usage,taskmanagers,kafka_lag,msg_per_second,mem_usage,flink_ingestion]:
             if math.isnan(x) or x == '':
+                self.cooldown_timer = datetime.now()
                 return 0
+
+        # Smooth Metrics
+        #self.smooth_metrics(flink_ingestion,cpu_usage,mem_usage,kafka_lag)
+        #flink_ingestion = mean(self.flink_ingestion_smoothed)
+
+
+        # New Approach is CPU agnosticy
+        cpu_usage = round(cpu_usage,1)
+
+        #if self.pass_criteria(mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
+        if datetime.now() - self.cooldown_timer > timedelta(seconds=30):
+            max_rate = self.database.check_max_rate(taskmanagers, cpu_usage)
+            if max_rate:
+                if max_rate < flink_ingestion:
+                    logger.info("-------------------")
+                    logger.info(f"Updating Max Rate: Parallelism {taskmanagers} to {flink_ingestion}")
+                    logger.info("-------------------")
+                    self.database.update_performance(
+                        taskmanagers=taskmanagers,
+                        cpu=cpu_usage,
+                        max_rate=flink_ingestion)
+                else:
+                    logger.info(f"Max Rate above current msg/s, Max Rate: {max_rate}, msg/s: {msg_per_second}")
+            else:
+                logger.info("-------------------")
+                logger.info(f"Inserting New Entry: Parallelism {taskmanagers} at {flink_ingestion}")
+                logger.info("-------------------")
+                self.database.insert_performance(
+                    taskmanagers=taskmanagers,
+                    cpu=cpu_usage,
+                    max_rate=flink_ingestion,
+                    parallelism=taskmanagers)
+
+    def smooth_metrics(self, flink_ingestion, cpu_usage, mem_usage, kafka_lag):
 
         # Get smoothed Flink Ingestion
         self.flink_ingestion_smoothed.append(flink_ingestion)
@@ -79,45 +115,22 @@ class PerformanceMeter:
         # Kafka Lag History
         std, median = 0, 0
         self.lag_history.append(int(kafka_lag))
-        if len(self.lag_history) > config.CONFIG['rescale_window'] / config.CONFIG['metric_frequency']:
+        if len(self.lag_history) > config.config['rescale_window'] / config.config['metric_frequency']:
             self.lag_history.pop(0)
             lag_history_np = np.asarray(self.lag_history)
             std = lag_history_np.std()
             median = np.median(lag_history_np)
 
-        logger.info(f"Median: {median}, std {std}, lag: {kafka_lag}")
-
-
-        if self.pass_criteria(mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
-            max_rate = self.database.check_max_rate(taskmanagers)
-            if max_rate:
-                if max_rate < mean(self.flink_ingestion_smoothed):
-                    logger.info("-------------------")
-                    logger.info(f"Updating Max Rate: Parallelism {taskmanagers} to {mean(self.flink_ingestion_smoothed)}")
-                    logger.info("-------------------")
-                    self.database.update_performance(
-                        id=taskmanagers,
-                        max_rate=mean(self.flink_ingestion_smoothed))
-                else:
-                    logger.info(f"Max Rate above current msg/s, Max Rate: {max_rate}, msg/s: {msg_per_second}")
-            else:
-                logger.info("-------------------")
-                logger.info(f"Inserting New Entry: Parallelism {taskmanagers} at {mean(self.flink_ingestion_smoothed)}")
-                logger.info("-------------------")
-                self.database.insert_performance(
-                    id=taskmanagers,
-                    num_taskmanager_pods=taskmanagers,
-                    max_rate=mean(self.flink_ingestion_smoothed),
-                    parallelism=taskmanagers)
+        #logger.info(f"Median: {median}, std {std}, lag: {kafka_lag}")
 
     def pass_criteria(self, mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
         pass_criteria = True
         diagnosis = ""
-        if mean(self.mem_smoothed) > config.THRESHOLDS['mem_max']:
+        if mean(self.mem_smoothed) > config.thresholds['mem_max']:
             pass_criteria = False
             diagnosis += f"Memory Usage too High: {mem_usage} | "
-
-        if config.THRESHOLDS['cpu_max'] < mean(self.cpu_smoothed) or mean(self.cpu_smoothed) < config.THRESHOLDS['cpu_min']:
+        
+        if config.thresholds['cpu_max'] < mean(self.cpu_smoothed) or mean(self.cpu_smoothed) < config.thresholds['cpu_min']:
             pass_criteria = False
             diagnosis += f"CPU Usage too High/Low: {cpu_usage} | "
 

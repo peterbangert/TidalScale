@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-trace-generator-deployment
+  labels:
+    app: real-trace-generator
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: real-trace-generator
+  template:
+    metadata:
+      labels:
+        app: real-trace-generator
+    spec:
+      containers:
+      - name: real-trace-generator
+        image: eu.gcr.io/bangert-thesis/real-trace-generator
+        ports:
+        - containerPort: 80
+      serviceAccountName: default
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"

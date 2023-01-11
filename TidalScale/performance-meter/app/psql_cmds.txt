@@ -1,2 +1,0 @@
-$ psql -h localhost -U postgres -d tidalscale -c "SELECT * FROM configurations;
-

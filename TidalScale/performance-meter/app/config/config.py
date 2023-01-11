@@ -1,54 +1,57 @@
-LOGGER = {
+logger = {
     # Log console output to file?
     "log_to_file": False,
     # The logging file path for the python logger
-    "log_path": "/tmp/traffic_generator.log",
+    "log_path": "/tmp/app.log",
 }
 
-CONFIG = {
+config = {
     "rescale_window" : 120,
     "metric_frequency" : 2
 }
 
-KAFKA = {
+kafka = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
     "topic": 'metrics'
 }
 
-KAFKA_LOCAL = {
+kafka_local = {
     "broker_ip": "localhost",
     "port": 9092,
     "topic": 'metrics'
 }
 
-THRESHOLDS = {
+thresholds = {
     "cpu_max": .8,
     "cpu_min": .2,
     "mem_max": .9,
+    "rescale_cooldown": 30 # Seconds
 }
 
-POSTGRES = {
+# Determines where to load kube config
+#   locally at $HOME/.kube/config 
+#   or in-cluster config as ServiceAccount usage expects
+deployment = 'local'
+
+postgres = {
     "host": "localhost",
     "user": "postgres",
     "password": "admin",
     "table": "configurations",
     "database": "tidalscale",
     "table_schema": "CREATE TABLE configurations"
-                    "(id SERIAL PRIMARY KEY,"
-                    "num_taskmanager_pods int NOT NULL,"
-                    "max_rate int NOT NULL,"
-                    "parallelism int NOT NULL UNIQUE,"
-                    "restart_time int,"
-                    "catchup_time int,"
-                    "recovery_time int,"
+                    "(taskmanagers int, "
+                    "cpu float, "
+                    "parallelism int, "
+                    "max_rate int NOT NULL, "
+                    "PRIMARY KEY (taskmanagers, cpu), "
                     "created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL);",
     "insert": "INSERT INTO configurations ("
-              "id,num_taskmanager_pods,max_rate,parallelism,restart_time,catchup_time,recovery_time)"
+              "taskmanagers,cpu,parallelism,max_rate)"
               " values "
-              "(" + 6*"%s, " + " %s );",
-              
-    "update": "UPDATE configurations SET max_rate = %s WHERE id = %s;",
-    "check_max_rate": "SELECT max_rate FROM configurations WHERE id = %s;",
+              "(" + 3*"%s, " + " %s );",        
+    "update": "UPDATE configurations SET max_rate = %s WHERE taskmanagers = %s AND cpu = %s;",
+    "check_max_rate": "SELECT max_rate FROM configurations WHERE taskmanagers = %s AND cpu = %s;",
     "select_all": "SELECT * FROM configurations;"
 }

@@ -57,14 +57,17 @@ class PredictionAggregator:
 
         msg_per_second = 0
         timestamp = 0
+        
+        offline_training = 'offline_training' in metric_report
+
         if 'load' in metric_report:
             msg_per_second = float(metric_report['load'])
-            timestamp = datetime.strptime(metric_report['timestamp'], config.CONFIG['time_fmt'])
+            timestamp = datetime.strptime(metric_report['timestamp'], config.config['time_fmt'])
         else:
             for item in metric_report['kafkaMessagesPerSecond']:
                 if item['metric']['topic'] == "data":
                     msg_per_second = float(item['value'][1])
-                    timestamp = datetime.strptime(metric_report['timestamp'],config.CONFIG['time_fmt'])
+                    timestamp = datetime.strptime(metric_report['timestamp'],config.config['time_fmt'])
 
         if math.isnan(msg_per_second) or msg_per_second == '' or msg_per_second == 0:
             return 0
@@ -75,8 +78,8 @@ class PredictionAggregator:
 
 
         ## Get Predictions from Both Models
-        st_horizon, st_prediction = self.st_predictor.get_prediction(timestamp,msg_per_second)
-        lt_horizon, lt_prediction = self.lt_predictor.get_prediction(timestamp,msg_per_second)
+        st_horizon, st_prediction = self.st_predictor.get_prediction(timestamp,msg_per_second, offline_training)
+        lt_horizon, lt_prediction = self.lt_predictor.get_prediction(timestamp,msg_per_second, offline_training) 
 
         logger.info(f"Recieved Predictions. ST: {st_prediction}, Horizon: {st_horizon}")
         logger.info(f"Recieved Predictions. LT: {lt_prediction}, Horizon: {lt_horizon}")
@@ -128,8 +131,10 @@ class PredictionAggregator:
         aggregate_prediction = st_prediction_weighted + lt_prediction_weighted
 
         message = {
-            "timestamp": f"{datetime.utcnow()}",
-            "prediction_horizon": f"{datetime.utcnow() + timedelta(seconds=config.CONFIG['rescale_window'])}",
+            "messages_per_second": msg_per_second, 
+            "timestamp_utcnow": f"{datetime.utcnow()}",
+            "timestamp": f"{timestamp}",
+            "prediction_horizon": f"{timestamp + timedelta(seconds=config.config['rescale_window'])}",
             "aggregate_prediction": aggregate_prediction,
             "st_weight": st_weight,
             "lt_weight": lt_weight,
@@ -140,6 +145,9 @@ class PredictionAggregator:
         }
 
         logger.info(message)
+
+        if offline_training:
+            return 0
 
 
         ## If Prediction is old, dont publish
@@ -153,7 +161,7 @@ class PredictionAggregator:
     def append_and_prune(self, timestamp, data, tuple_list):
         tuple_list.append((timestamp, data))
         while len(tuple_list) > 0 and tuple_list[0][0] < tuple_list[-1][0] - timedelta(
-                seconds=config.CONFIG['rescale_window'] * 2):
+                seconds=config.config['rescale_window'] * 2):
             tuple_list.pop(0)
         return tuple_list
 
@@ -187,7 +195,7 @@ class PredictionAggregator:
             trace = self.trace_history[trace_idx]
             prediction = prediction_history[pred_idx]
 
-            if abs(trace[0] - prediction[0]).total_seconds() <= config.CONFIG['metric_frequency']:
+            if abs(trace[0] - prediction[0]).total_seconds() <= config.config['metric_frequency']:
                 trace_prediction_zip.append((trace[1], prediction[1]))
                 trace_idx += 1
                 pred_idx += 1

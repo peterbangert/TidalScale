@@ -24,7 +24,7 @@ class RescaleController:
         self.flink_controller = FlinkController(args)
         self.lag_history = []
         self.current_parallelism = 0
-        self.cooldown_timestamp = datetime.utcnow() - timedelta(seconds=config.CONFIG['rescale_window'] - 20)
+        self.cooldown_timestamp = datetime.utcnow() - timedelta(seconds=config.config['rescale_window'] - 20)
         self.agg_prediction = 0
         self.lag_recovery_mode = False
 
@@ -57,7 +57,7 @@ class RescaleController:
             for item in metric_report['kafkaMessagesPerSecond']:
                 if item['metric']['topic'] == "data":
                     msg_per_second = float(item['value'][1])
-                    timestamp = datetime.strptime(metric_report['timestamp'], config.CONFIG['time_fmt'])
+                    timestamp = datetime.strptime(metric_report['timestamp'], config.config['time_fmt'])
             mem_usage = float(metric_report['memUsage'][0]['value'][1])
 
             ## Return if Metrics a NaN
@@ -79,7 +79,7 @@ class RescaleController:
 
         if rescale_bool:
 
-            if datetime.utcnow() - timedelta(seconds=config.CONFIG['rescale_window']) < self.cooldown_timestamp:
+            if datetime.utcnow() - timedelta(seconds=config.config['rescale_window']) < self.cooldown_timestamp:
                 logger.info("Rescale Aborted: Within cooldown window")
             else:
 
@@ -102,8 +102,8 @@ class RescaleController:
                     logger.info(f"Rescale Aborted: Target Parallelism incorrect. Upscale: {upscale}, Target: {target_parallelism}, current: {self.current_parallelism}")
 
     def get_lag_recovery_parallelism(self, flink_ingestion, kafka_lag, target_parallelism):
-        workload = self.agg_prediction * config.CONFIG['rescale_window'] + kafka_lag
-        t_ingestion_rate = math.ceil(workload / config.CONFIG['rescale_window'])
+        workload = self.agg_prediction * config.config['rescale_window'] + kafka_lag
+        t_ingestion_rate = math.ceil(workload / config.config['rescale_window'])
         t_parrallelism = math.ceil(( t_ingestion_rate / flink_ingestion ) * self.current_parallelism)
         if t_parrallelism < target_parallelism:
             logger.info(f"Lag Recovery Parallelism less than Regression Parallelism: t_p {t_parrallelism}, target {target_parallelism}")
@@ -116,8 +116,8 @@ class RescaleController:
     def check_lag_recovery_mode(self, flink_ingestion, kafka_lag):
         if self.agg_prediction == 0: return False
 
-        workload = self.agg_prediction * config.CONFIG['rescale_window'] + kafka_lag
-        ingestion_power = flink_ingestion * config.CONFIG['rescale_window']
+        workload = self.agg_prediction * config.config['rescale_window'] + kafka_lag
+        ingestion_power = flink_ingestion * config.config['rescale_window']
 
         if workload > ingestion_power:
             logger.info("Lag Recovery Mode Detected")
@@ -126,12 +126,12 @@ class RescaleController:
             return False
 
     def scale_bounds(self, target_parallelism, upscale):
-        if target_parallelism > config.CONFIG['parallelization_upper_bound']:
+        if target_parallelism > config.config['parallelization_upper_bound']:
             logger.info(f"Rescale Target above appropriate Bounds. Target: {target_parallelism}")
-            target_parallelism = config.CONFIG['parallelization_upper_bound']
-        elif target_parallelism < config.CONFIG['parallelization_lower_bound']:
+            target_parallelism = config.config['parallelization_upper_bound']
+        elif target_parallelism < config.config['parallelization_lower_bound']:
             logger.info(f"Rescale Target below appropriate Bounds. Target: {target_parallelism}")
-            target_parallelism = config.CONFIG['parallelization_lower_bound']
+            target_parallelism = config.config['parallelization_lower_bound']
         return target_parallelism
 
     def rescale_check(self, mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
@@ -151,7 +151,7 @@ class RescaleController:
             return 0, 0
         else:
             self.lag_history.append(int(kafka_lag))
-        if len(self.lag_history) > config.CONFIG['rescale_window'] / config.CONFIG['metric_frequency']:
+        if len(self.lag_history) > config.config['rescale_window'] / config.config['metric_frequency']:
             self.lag_history.pop(0)
         lag_history_np = np.asarray(self.lag_history)
         std = lag_history_np.std()
@@ -174,9 +174,9 @@ class RescaleController:
     def underutilization_check(self, mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
         fail_criteria = False
         diagnosis = ""
-        if  cpu_usage < config.THRESHOLDS['cpu_min'] \
+        if  cpu_usage < config.thresholds['cpu_min'] \
                 and kafka_lag < msg_per_second \
-                and  mem_usage < config.THRESHOLDS['mem_max']:
+                and  mem_usage < config.thresholds['mem_max']:
             fail_criteria = True
             diagnosis += f"CPU Usage too Low: {cpu_usage} | "
             diagnosis += f"Lag lower than MSG/s: Lag: {kafka_lag}, msg/s: {msg_per_second} | "
@@ -189,11 +189,11 @@ class RescaleController:
     def overutilization_check(self, mem_usage, cpu_usage, kafka_lag, msg_per_second, median, std):
         fail_criteria = False
         diagnosis = ""
-        if mem_usage > config.THRESHOLDS['mem_max']:
+        if mem_usage > config.thresholds['mem_max']:
             fail_criteria = True
             diagnosis += f"Memory Usage too High: {mem_usage} | "
 
-        if config.THRESHOLDS['cpu_max'] < cpu_usage:
+        if config.thresholds['cpu_max'] < cpu_usage:
             fail_criteria = True
             diagnosis += f"CPU Usage too High/Low: {cpu_usage} | "
 

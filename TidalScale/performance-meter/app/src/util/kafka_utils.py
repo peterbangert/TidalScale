@@ -15,10 +15,10 @@ def get_broker(args):
         bootstrap_server = args.broker    
     elif args.local:
         logger.info("Connecting to local Kafka Broker")
-        bootstrap_server = f'{config.KAFKA_LOCAL["broker_ip"]}:{config.KAFKA_LOCAL["port"]}'    
+        bootstrap_server = f'{config.kafka_local["broker_ip"]}:{config.kafka_local["port"]}'    
     else:
         logger.info("Connecting to GCP Kafka Broker")
-        bootstrap_server = f'{config.KAFKA["broker_ip"]}:{config.KAFKA["port"]}'
+        bootstrap_server = f'{config.kafka["broker_ip"]}:{config.kafka["port"]}'
 
     return bootstrap_server
 

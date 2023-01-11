@@ -20,7 +20,10 @@ class FlinkController:
         logger.info("Initializing Flink Controller")
         self.depl_name = cfg.k8s['flink-taskmanager']
         self.namespace = cfg.k8s['namespace']
-        config.load_kube_config()
+        if cfg.deployment == 'local':
+            config.load_kube_config()
+        else:
+            config.load_config()
         self.api = client.AppsV1Api()
 
     def check_flink_deployment(self):
@@ -32,7 +35,6 @@ class FlinkController:
             return True
 
     def deploy_flink(self):
-
         path = cfg.k8s['flink-reactive-path']
         for file in [f for f in listdir(path) if isfile(join(path, f))]:
             with open(path.join(path.dirname(path), file)) as f:

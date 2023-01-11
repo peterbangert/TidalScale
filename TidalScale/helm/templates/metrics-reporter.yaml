@@ -1,21 +1,35 @@
+{{- if .Values.metricsreporter.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: real-trace-generator-deployment
+  name: metrics-reporter-deployment
   labels:
-    app: real-trace-generator
+    app: {{ .Release.Name }}
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: real-trace-generator
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: real-trace-generator
+        app: {{ .Release.Name }}
     spec:
       containers:
-      - name: real-trace-generator
-        image: eu.gcr.io/tidalscale-thesis/real-trace-generator
+      - name: metrics-reporter
+        image: eu.gcr.io/{{ .Values.global.projectId }}/metrics-reporter
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            items:
+              - key: config.yaml
+                path: config.yaml
+              - key: metrics-reporter-config.yaml
+                path: metrics-reporter-config.yaml
+{{- end }}
