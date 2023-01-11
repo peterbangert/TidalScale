@@ -1,4 +1,7 @@
 confluent_kafka==1.9.0
+kafka_python==2.0.2
 matplotlib==3.5.2
 numpy==1.22.4
 pandas==1.4.2
+statsmodels==0.13.2
+PyYAML==6.0

@@ -21,5 +21,5 @@ class AggregatePredictionProducer:
 
 
     def publish(self, message):
-        self.producer.send(config.KAFKA['agg_prediction'], message)
+        self.producer.send(config.kafka['agg_prediction_topic'], message)
 

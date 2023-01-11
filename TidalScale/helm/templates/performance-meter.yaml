@@ -1,0 +1,35 @@
+{{- if .Values.performancemeter.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: performance-meter-deployment
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: performance-meter
+        image: eu.gcr.io/{{ .Values.global.projectId }}/performance-meter
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            items:
+              - key: config.yaml
+                path: config.yaml
+              - key: performance-meter-config.yaml
+                path: performance-meter-config.yaml
+{{- end }}

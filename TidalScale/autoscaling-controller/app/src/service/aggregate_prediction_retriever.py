@@ -32,7 +32,7 @@ class PredictionRetriever:
                 enable_auto_commit=False,
                 auto_offset_reset='latest')
 
-            tp = TopicPartition(config.KAFKA['agg_prediction'],0)
+            tp = TopicPartition(config.kafka['agg_prediction'],0)
             self.prediction_consumer.assign([tp])
 
         except:
@@ -46,7 +46,7 @@ class PredictionRetriever:
         self.prediction_consumer.seek_to_end()
         last_msg = next(self.prediction_consumer).value
 
-        while datetime.strptime(last_msg['timestamp'], config.CONFIG['time_fmt']) < datetime.utcnow() - timedelta(seconds=config.CONFIG['metric_frequency']):
+        while datetime.strptime(last_msg['timestamp'], config.config['time_fmt']) < datetime.utcnow() - timedelta(seconds=config.config['metric_frequency']):
             last_msg = next(self.prediction_consumer).value
 
         logger.info(f"{last_msg}")

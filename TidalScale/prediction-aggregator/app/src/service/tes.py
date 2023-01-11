@@ -42,14 +42,14 @@ class TripleExponentialSmoothing:
 
 
     def create_prediction(self, trace_history):
-        model, hyper_params = self.optimizeHoltWinters(trace_history, config.CONFIG['traces_per_hour'])
+        model, hyper_params = self.optimizeHoltWinters(trace_history, config.config['traces_per_hour'])
 
-        model = ExponentialSmoothing(trace_history.load, seasonal_periods=24 * config.CONFIG['traces_per_hour'],
+        model = ExponentialSmoothing(trace_history.load, seasonal_periods=24 * config.config['traces_per_hour'],
                                      seasonal=hyper_params, initialization_method="estimated").fit()
 
 
 
-        prediction = model.forecast(config.CONFIG['forecast_horizon'])
+        prediction = model.forecast(config.config['forecast_horizon'])
 
         if not isinstance(prediction.index[-1], datetime):
             logger.error(f"HORIZON ISNT DATETIME")

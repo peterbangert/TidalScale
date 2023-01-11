@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 ##
-#    CLUSTER MANAGEMENT
+#   CLUSTER MANAGEMENT
 #
 # 	cluster-create: create gke 3 node cluster
 #	cluster-destroy: destory all
 ##
 
 HELM_DIR=	k8s/helm
-PROJECT_NAME= tidalscale-thesis
+PROJECT_NAME= tidalscale-thesismsck
 
 cluster-create:
 	./scripts/cluster-setup-accounts.sh
@@ -20,6 +20,8 @@ cluster-destroy:
 cluster-increase-nodepool:
 	./scripts/cluster-resize.sh
 
+cluster-enable-workload-identity:
+	./scripts/cluster-enable-workload-identity.sh
 ##
 #	SERVICE MANAGEMENT
 #
@@ -88,6 +90,11 @@ flink-uninstall:
 	kubectl get deployments | awk '/^flink-cluster.*/{ print $$1 }' | \
 		xargs -n 1 kubectl delete deployment
 
+flink-get-web-ui-reactive:
+	node_port=$$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services flink-jobmanager-rest) && \
+	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}') && \
+	echo "http://$$node_ip:$$node_port"
+
 flink-get-web-ui:
 	node_port=$$(kubectl get --namespace default -o jsonpath="{.spec.ports[0].nodePort}" services flink-cluster-rest) && \
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}') && \
@@ -123,6 +130,11 @@ kafka-show-brokers:
 
 grafana-get-web-ui:
 	node_port=30080 && \
+	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
+	echo "http://$$node_ip:$$node_port"
+
+prometheus-get-web-ui:
+	node_port=30090 && \
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
 	echo "http://$$node_ip:$$node_port"
 

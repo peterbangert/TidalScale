@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trafficgenerator-deployment
+  labels:
+    app: trafficgenerator
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: trafficgenerator
+  template:
+    metadata:
+      labels:
+        app: trafficgenerator
+    spec:
+      containers:
+      - name: real-trace-generator
+        image: eu.gcr.io/{{ .Values.global.projectId }}/real-trace-generator
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      serviceAccountName: default
+      volumes:
+        - name: config-volume
+          projected:
+            sources:
+            - configMap:
+                name: trafficgenerator-configmap
+                items:
+                  - key: trafficgenerator-config.yaml
+                    path: trafficgenerator-config.yaml
+            - configMap:
+                name: {{ .Release.Name }}-configmap
+                items:
+                  - key: config.yaml
+                    path: config.yaml
+      {{- if eq "pubsub" $.Values.global.broker }}
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
+      {{- end }}

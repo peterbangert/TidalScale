@@ -3,7 +3,7 @@
 set -eu
 set -x
 
-project="tidalscale-thesis"
+project="thesistidalscale"
 terraform_user="terraform"
 terraform_service_account="$terraform_user@$project.iam.gserviceaccount.com"
 

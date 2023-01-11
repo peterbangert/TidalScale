@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  labels:
+    app: {{ .Release.Name }}
+data:
+  config.yaml: |+
+    {{- toYaml $.Values.global | nindent 12 }}
+  autoscaling-controller-config.yaml: |+
+    {{- toYaml $.Values.autoscalingcontroller.config | nindent 12 }}
+  performance-meter-config.yaml: |+
+    {{- toYaml $.Values.performancemeter.config | nindent 12 }}
+  prediction-aggregator-config.yaml: |+
+    {{- toYaml $.Values.predictionaggregator.config | nindent 12 }}
+  metrics-reporter-config.yaml: |+
+    {{- toYaml $.Values.metricsreporter.config | nindent 12 }}

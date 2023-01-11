@@ -15,9 +15,9 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: jobmanager
-          image: eu.gcr.io/tidalscale-thesis/quickstart:latest
+          image: {{ .Values.flinkJob.image }}
           env:
-          args: ["standalone-job", "--job-classname", "org.myorg.quickstart.WordCount"] # optional arguments: ["--job-id", "<job id>", "--fromSavepoint", "/path/to/savepoint", "--allowNonRestoredState"]
+          args: ["standalone-job", "--job-classname", "{{ .Values.flinkJob.mainClass }}"] # optional arguments: ["--job-id", "<job id>", "--fromSavepoint", "/path/to/savepoint", "--allowNonRestoredState"]
           ports:
             - containerPort: 6123
               name: rpc

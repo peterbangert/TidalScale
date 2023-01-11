@@ -1,11 +1,11 @@
-LOGGER = {
+logger = {
     # Log console output to file?
     "log_to_file": False,
     # The logging file path for the python logger
-    "log_path": "/tmp/traffic_generator.log",
+    "log_path": "/tmp/app.log",
 }
 
-KAFKA = {
+kafka = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
     "metric_topic": 'metrics',
@@ -13,13 +13,13 @@ KAFKA = {
     'agg_prediction': 'agg_prediction'
 }
 
-KAFKA_LOCAL = {
+kafka_local = {
     "broker_ip": "localhost",
     "port": 9092,
     "metric_topic": 'metrics'
 }
 
-CONFIG = {
+config = {
     "rescale_window": 180,
     "metric_frequency": 2,
     "time_fmt": '%Y-%m-%d %H:%M:%S.%f',
@@ -27,13 +27,13 @@ CONFIG = {
     "parallelization_lower_bound": 1
 }
 
-THRESHOLDS = {
+thresholds = {
     "cpu_max": .8,
     "cpu_min": .4,
     "mem_max": .9,
 }
 
-POSTGRES = {
+postgres = {
     "host": "localhost",
     "user": "postgres",
     "password": "admin",

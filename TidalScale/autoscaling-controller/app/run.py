@@ -4,6 +4,7 @@ import argparse
 import logging
 from logging.handlers import RotatingFileHandler
 from config import config
+from src.util import config_loader
 import fileinput
 from src.rescale_controller import RescaleController
 
@@ -16,7 +17,7 @@ def init_logger():
     '''
     
     # Path of logfile
-    log_path = config.LOGGER["log_path"]
+    log_path = config.logger["log_path"]
 
     # Configure logger
     logFormatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -24,7 +25,7 @@ def init_logger():
     logger.setLevel(logging.INFO)
 
     # Log to file?
-    if config.LOGGER["log_to_file"]:
+    if config.logger["log_to_file"]:
         fileHandler = RotatingFileHandler(log_path, mode="a", maxBytes=10e6, backupCount=5)
         fileHandler.setFormatter(logFormatter)
         logger.addHandler(fileHandler)
@@ -43,11 +44,13 @@ if __name__ == "__main__":
         - Initializes Log Parser
         Either stdin or -i|--infile can be read as input
     '''
-    init_logger()
     parser = argparse.ArgumentParser(description='Traffic Generator')
     parser.add_argument('-l','--local',action='store_true',help='Run traffic generator locally, use local kafka broker')
     parser.add_argument('-b','--broker',help='<Address:Port> of kafka broker, default is config.py')
+    parser.add_argument('--config_path',default='/config/')
     args = parser.parse_args()
+    config_loader.load_config(args=args)
+    init_logger()
 
     rescale_controller = RescaleController(args)
     rescale_controller.run()

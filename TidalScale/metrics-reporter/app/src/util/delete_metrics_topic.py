@@ -16,9 +16,9 @@ def delete_metrics_topic(args):
 
     # Delete Metric Topic if Exists
     bootstrap_server = kafka_utils.get_broker(args)
-    if kafka_utils.check_topic_exists(bootstrap_server, config.KAFKA['topic']):
+    if kafka_utils.check_topic_exists(bootstrap_server, config.kafka['topic']):
         logger.info("Metrics Topic found.")
-        kafka_utils.delete_topic(bootstrap_server, config.KAFKA['topic'])
+        kafka_utils.delete_topic(bootstrap_server, config.kafka['topic'])
     else:
         logger.info("No Metrics Topic found.")
 

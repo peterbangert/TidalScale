@@ -15,7 +15,7 @@ class MetricConsumer:
         bootstrap_server = kafka_utils.get_broker(args)
         try:
             self.consumer = KafkaConsumer(
-                config.KAFKA['metric_topic'],
+                config.kafka['metric_topic'],
                 bootstrap_servers=[bootstrap_server],
                 value_deserializer=lambda m: json.loads(m.decode('ascii')),
                 auto_offset_reset='latest')

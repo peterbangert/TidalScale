@@ -4,6 +4,7 @@ import argparse
 import logging
 from logging.handlers import RotatingFileHandler
 from config import config
+from src.util import config_loader
 import fileinput
 from src.util import kafka_utils
 from src.prediction_aggregator import PredictionAggregator
@@ -17,7 +18,7 @@ def init_logger():
     '''
     
     # Path of logfile
-    log_path = config.LOGGER["log_path"]
+    log_path = config.logger["log_path"]
 
     # Configure logger
     logFormatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
@@ -25,7 +26,7 @@ def init_logger():
     logger.setLevel(logging.INFO)
 
     # Log to file?
-    if config.LOGGER["log_to_file"]:
+    if config.logger["log_to_file"]:
         fileHandler = RotatingFileHandler(log_path, mode="a", maxBytes=10e6, backupCount=5)
         fileHandler.setFormatter(logFormatter)
         logger.addHandler(fileHandler)
@@ -44,18 +45,17 @@ if __name__ == "__main__":
         - Initializes Log Parser
         Either stdin or -i|--infile can be read as input
     '''
-
-
-    init_logger()
     parser = argparse.ArgumentParser(description='Traffic Generator')
-
     parser.add_argument('-l','--local',action='store_true',help='Run traffic generator locally, use local kafka broker')
     parser.add_argument('-b','--broker',help='<Address:Port> of kafka broker, default is config.py')
+    parser.add_argument('--config_path',default='/config/')
     args = parser.parse_args()
+    config_loader.load_config(args=args)
+    init_logger()
 
     bootstrap_server = kafka_utils.get_broker(args)
-    if not kafka_utils.check_topic_exists(bootstrap_server, config.KAFKA['agg_prediction']):
-        kafka_utils.create_topic(bootstrap_server,config.KAFKA['agg_prediction'],config.KAFKA['agg_prediction_partitions'])
+    if not kafka_utils.check_topic_exists(bootstrap_server, config.kafka['agg_prediction_topic']):
+        kafka_utils.create_topic(bootstrap_server,config.kafka['agg_prediction_topic'],config.kafka['agg_prediction_topic_partitions'])
 
     prediction_aggregator = PredictionAggregator(args)
     prediction_aggregator.run()

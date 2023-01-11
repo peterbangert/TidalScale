@@ -46,7 +46,8 @@ public class WordCount {
 
 		//Source
 		KafkaSource<String> source = KafkaSource.<String>builder()
-				.setBootstrapServers("kafka.default.svc.cluster.local:9092")
+				//.setBootstrapServers("kafka.default.svc.cluster.local:9092")
+				.setBootstrapServers("34.159.193.59:31090")
 				.setTopics("data")
 				.setGroupId("flink-group")
 				.setStartingOffsets(OffsetsInitializer.latest())

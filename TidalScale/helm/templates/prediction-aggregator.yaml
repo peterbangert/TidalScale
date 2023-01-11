@@ -1,0 +1,35 @@
+{{- if .Values.predictionaggregator.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prediction-aggregator-deployment
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: prediction-aggregator
+        image: eu.gcr.io/{{ .Values.global.projectId }}/prediction-aggregator
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            items:
+              - key: config.yaml
+                path: config.yaml
+              - key: prediction-aggregator-config.yaml
+                path: prediction-aggregator-config.yaml
+{{- end }}

@@ -1,0 +1,53 @@
+# Default values for traffic-generator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 5
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+## Configuration for Traffic Generator
+trafficgenerator:
+  config:
+    trace_files:
+      -alibaba
+      -avazu
+      -google
+      -horton
+      -IoT
+      -retailrocket
+      -taxi
+      -wiki_de
+      -wiki_en
+    # Workload Trace to use, options: alibaba, avazu, google, horton, IoT, retailrocket, taxi, wiki_de, wiki_en
+    trace: retailrocket
+    create_trace_topic: True
+    # Trace Generator
+    trace_generator:
+      # Average msg/second to adjust trace to
+      avg_msg_per_second: 100000.0
+      # Mean of Trace File: (108k from provided traces)
+      mean: 108000.0
+      # Std Deviation of Trace File
+      std_deviation: 0.1
+      # Seconds Between Trace: standard from file is 300 seconds
+      seconds_between_traces: 60
+      # Expand Variance of trace by this factor
+      variance: 3
+      # Number of real hours to train on, amount of cycles depends on second Between Traces scale to trace source
+      lt_predictor_training_period: 20 # hours
+      # Number of pods
+      pods: 5
+    kafka:
+      trace_topic: trace
+      trace_topic_partitions: 1

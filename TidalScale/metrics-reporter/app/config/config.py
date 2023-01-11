@@ -1,28 +1,30 @@
-LOGGER = {
+logger = {
     # Log console output to file?
     "log_to_file": False,
     # The logging file path for the python logger
-    "log_path": "/tmp/traffic_generator.log",
+    "log_path": "/tmp/app.log",
 }
 
-KAFKA = {
+kafka = {
     "broker_ip": "kafka.default.svc.cluster.local",
     "port": 9092,
-    "topic": 'metrics'
+    "metric_topic": 'metrics',
+    "metric_topic_partitions": 1
 }
 
-KAFKA_LOCAL = {
+kafka_local = {
     "broker_ip": "localhost",
     "port": 9092,
-    "topic": 'metrics'
+    "metric_topic": 'metrics',
+    "metric_topic_partitions": 1
 }
 
-PROMETHEUS = {
+prometheus = {
     "query_path": "/api/v1/query",
-    "url": "http://34.89.176.147:30090"
+    "url": "prometheus-rest.default.svc.cluster.local:9090"
 }
 
-PROMETHEUS_QUERIES = {
+prometheus_queries = {
     "cpuUsage": "sum(flink_taskmanager_Status_JVM_CPU_Load) / sum(flink_jobmanager_numRegisteredTaskManagers)",
     "kafkaLag": "sum(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max) / count(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max)",
     "maxJobLatency": "max(flink_taskmanager_job_latency_source_id_operator_id_operator_subtask_index_latency)",
