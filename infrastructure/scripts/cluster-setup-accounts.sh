@@ -3,7 +3,7 @@
 set -eu
 set -x
 
-project="thesistidalscale"
+project="$(gcloud config get-value project)"
 terraform_user="terraform"
 terraform_service_account="$terraform_user@$project.iam.gserviceaccount.com"
 

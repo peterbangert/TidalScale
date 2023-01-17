@@ -42,6 +42,8 @@ def config_3d_regression(rows, expected_load):
 
     if len(rows) == 0:
         return None
+    
+    logger.info(rows)
 
     x = [x[0] for x in rows]  # Taskmanager
     z = [x[1] for x in rows]  # CPU

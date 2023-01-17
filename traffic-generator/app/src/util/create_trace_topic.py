@@ -35,10 +35,10 @@ def create_trace_topic(args):
         
         if kafka_utils.check_topic_exists(bootstrap_server, metric_topic):
             logger.info("Metric Topic found.")
-            kafka_utils.delete_topic(bootstrap_server, metric_topic)
+            #kafka_utils.delete_topic(bootstrap_server, metric_topic)
         else:
             logger.info("No Metric Topic found.")
-        kafka_utils.create_topic(bootstrap_server, metric_topic, partitions)
+            kafka_utils.create_topic(bootstrap_server, metric_topic, partitions)
 
 
     # Setup Kafka Producer    
