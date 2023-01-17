@@ -8,7 +8,7 @@ kafka:
   enabled: true
 
   ## configure cluster size
-  replicas: 3
+  replicas: 5
 
   ## configure NodePorts for external access
   ## Length must be the same as replicaCount

@@ -35,7 +35,7 @@ trafficgenerator:
     # Trace Generator
     trace_generator:
       # Average msg/second to adjust trace to
-      avg_msg_per_second: 100000.0
+      avg_msg_per_second: 200000.0
       # Mean of Trace File: (108k from provided traces)
       mean: 108000.0
       # Std Deviation of Trace File
@@ -47,7 +47,7 @@ trafficgenerator:
       # Number of real hours to train on, amount of cycles depends on second Between Traces scale to trace source
       lt_predictor_training_period: 20 # hours
       # Number of pods
-      pods: 5
+      pods: 10
     kafka:
       trace_topic: trace
       trace_topic_partitions: 1
