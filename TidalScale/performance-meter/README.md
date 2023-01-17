@@ -33,22 +33,27 @@ export PGPASSWORD=admin
 
 ## Running Postgresql in Helm
 
-PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
+1. PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:
 
-    my-postgresql.default.svc.cluster.local - Read/Write connection
+```
+my-postgresql.default.svc.cluster.local - Read/Write connection
+```
 
-To get the password for "postgres" run:
+2. To get the password for "postgres" run:
 
-    export postgres_PASSWORD=$(kubectl get secret --namespace default my-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
+```
+export PGPASSWORD=$(kubectl get secret --namespace default tidalscale-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
+```
 
-To connect to your database run the following command:
+3. Connect to database from outside the cluster:
 
-    kubectl run my-postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:15.1.0-debian-11-r12 --env="PGPASSWORD=$postgres_PASSWORD" \
-      --command -- psql --host my-postgresql -U postgres -d postgres -p 5432
+```    
+kube=ctl port-forward --namespace default svc/my-postgresql 5432:5432
+```
 
-    > NOTE: If you access the container using bash, make sure that you execute "/opt/bitnami/scripts/postgresql/entrypoint.sh /bin/bash" in order to avoid the error "psql: local user with ID 1001} does not exist"
+4. Drop and Restore table
 
-To connect to your database from outside the cluster execute the following commands:
-
-    kubectl port-forward --namespace default svc/my-postgresql 5432:5432 &
-    PGPASSWORD="$postgres_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
+```
+psql --host 127.0.0.1 -U postgres -d postgres -p 5432 -d tidalscale -c 'drop table configurations;'
+psql --host 127.0.0.1 -U postgres -d postgres -p 5432 -d tidalscale < pg_backup/221222_17-07-25_backup.psql
+```

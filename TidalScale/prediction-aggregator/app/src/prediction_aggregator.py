@@ -72,6 +72,9 @@ class PredictionAggregator:
         if math.isnan(msg_per_second) or msg_per_second == '' or msg_per_second == 0:
             return 0
 
+        ## Create messages for timestamp continuity
+        #self.maintain_timestamp_continuity(timestamp, msg_per_second)
+
         ## Append and Prune trace history
         self.trace_history = self.append_and_prune(timestamp, msg_per_second, self.trace_history)
 
@@ -228,3 +231,34 @@ class PredictionAggregator:
             logger.info("============")
 
         return smape
+
+    ##
+    # Maintain Timestamp Continuity
+    #   The purpose is to create stability and robustness for the prediction models
+    #   Since timestamps are used as the index in the long term prediction
+    #   And Pandas is sensitive when a frequency is set for the data intervals
+    #   It is necessary to maintain the timestamp continuity by creating messages
+    #   When there is a gap in the message delivarance
+    #
+    #   => Meaning, if 1 minute of timestamps is missing, it will be created.
+    ##
+    def maintain_timestamp_continuity(self, timestamp, msg_per_second):
+        if len(self.trace_history) > 0:
+            last_msg = self.trace_history[-1]
+        else:
+            return []
+
+        td = math.ceil((last_msg[0] - timestamp).total_seconds() / 60.0)
+
+        if td > 1:
+            logger.info(f"Time difference: {td} minutes")
+
+        new_timestamp = 0
+        for i in range(td):
+            new_timestamp = last_msg[0] + timedelta(minutes=1)
+            new_msg_ps = last_msg[1] + (((msg_per_second - last_msg[1]) / td) * (i + 1))
+            self.trace_history.append((new_timestamp,new_msg_ps))
+
+            ## Update msg history of both models
+            _,_ = self.st_predictor.get_prediction(new_timestamp,new_msg_ps, True)
+            _,_ = self.lt_predictor.get_prediction(new_timestamp,new_msg_ps, True) 

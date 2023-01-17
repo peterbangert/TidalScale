@@ -26,8 +26,8 @@ config = {
     "lt_prediction_frequency": 60, # 300 for normal trace
     'forecast_horizon': 3, # number of predictions in the future
     'traces_per_hour': 12,
-    'trace_history_duration_hours': 20, # 3 days / 5
-    'time_interval' : 60, # 300 for normal trace
+    'trace_history_duration_hours': 20, # 4 days / 5
+    'seconds_between_traces' : 60, # 300 for normal trace
     'time_fmt' : '%Y-%m-%d %H:%M:%S.%f',
     "MSE_bounds": 8,
     "spike_window": 10,

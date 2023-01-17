@@ -33,6 +33,11 @@ thresholds = {
     "mem_max": .9,
 }
 
+# Determines where to load kube config
+#   locally at $HOME/.kube/config 
+#   or in-cluster config as ServiceAccount usage expects
+deployment = 'local'
+
 postgres = {
     "host": "localhost",
     "user": "postgres",

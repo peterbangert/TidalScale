@@ -9,23 +9,23 @@ project="$(gcloud config get-value project)"
 
 # Set variables in Terraform files.
 for file in backend.tf variables.tf; do
-	(cd k8s/terraform && \
+	(cd terraform && \
 		sed "s|%%PROJECT_NAME%%|${project}|g" "${file}.in" > "$file")
 done
 
 # Put the key file into Terraform's directory.
-ln -fs "$PWD/key.json" k8s/terraform/key.json
+ln -fs "$PWD/key.json" terraform/key.json
 
 # Navigate to the folder k8s/terraform and initialize Terraform.
-(cd k8s/terraform && terraform init)
+(cd terraform && terraform init)
 
 # Validate the Terraform plan.
-(cd k8s/terraform && terraform plan)
+(cd terraform && terraform plan)
 
 # Apply the Terraform plan and confirm the action.
-(cd k8s/terraform && terraform apply -auto-approve)
+(cd terraform && terraform apply -auto-approve)
 
 # Configure kubectl with Terraform. tr -d removes extra quotations
-(cd k8s/terraform && gcloud container clusters get-credentials \
+(cd terraform && gcloud container clusters get-credentials \
 	$(terraform output cluster_name | tr -d '"' ) \
 	--zone $(terraform output zone | tr -d '"'))

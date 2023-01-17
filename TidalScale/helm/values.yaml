@@ -2,6 +2,8 @@
 ## Global variables for All TidalScale components
 global:
   projectId: thesistidalscale
+  # Flink Job to run: [WordCount]
+  flink-job: WordCount
   # Message Broker to Use: [kafka, pubsub, kafka_local]
   broker: kafka
   kafka:
@@ -106,7 +108,7 @@ predictionaggregator:
     forecast_horizon: 3 # number of predictions in the future
     traces_per_hour: 12
     trace_history_duration_hours: 20 # 3 days / 5
-    time_interval: 60 # 300 for normal trace
+    seconds_between_traces: 60 # 300 for normal trace
     MSE_bounds: 8
     spike_window: 10
     base_regression_length: 10

@@ -6,8 +6,8 @@ SHELL := /bin/bash
 #	cluster-destroy: destory all
 ##
 
-HELM_DIR=	k8s/helm
-PROJECT_NAME= tidalscale-thesismsck
+HELM_DIR=	helm/infrastructure
+PROJECT_NAME= $$(gcloud config get-value project)
 
 cluster-create:
 	./scripts/cluster-setup-accounts.sh
@@ -15,7 +15,7 @@ cluster-create:
 	./scripts/cluster-terraform.sh
 
 cluster-destroy:
-	cd k8s/terraform && terraform destroy -auto-approve
+	cd helm/terraform && terraform destroy -auto-approve
 
 cluster-increase-nodepool:
 	./scripts/cluster-resize.sh
@@ -31,32 +31,14 @@ cluster-enable-workload-identity:
 #	flink-install: setup flink cluster, session mode
 ##
 
-services-install:
-	${MAKE} hdfs-install
-	${MAKE} mpds-install
-	${MAKE} flink-install
+infra-install:
+	cd ${HELM_DIR} && helm install infrastructure .
 
-services-uninstall:
-	-${MAKE} hdfs-uninstall
-	-${MAKE} mpds-uninstall
-	-${MAKE} flink-uninstall
+infra-uninstall:
+	helm uninstall infrastructure
 
-hdfs-install:
-	./scripts/hdfs-deploy.sh
-	sleep 10
-	./scripts/hdfs-configure.sh
-
-hdfs-uninstall:
-	helm uninstall hadoop
-
-mpds-install:
-	cd ${HELM_DIR} && helm install mpds .
-
-mpds-uninstall:
-	helm uninstall mpds
-
-mpds-upgrade:
-	cd ${HELM_DIR} && helm upgrade mpds .
+infra-upgrade:
+	cd ${HELM_DIR} && helm upgrade infrastructure .
 
 
 ##
@@ -137,15 +119,6 @@ prometheus-get-web-ui:
 	node_port=30090 && \
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
 	echo "http://$$node_ip:$$node_port"
-
-kafka-create-topic:
-	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --create --topic data --partitions 8 --replication-factor 2 --config retention.ms=600000"
-	
-kafka-edit-retention:
-	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --alter --topic data --config retention.ms=300000"
-
-kafka-delete-topic:
-	kubectl exec -ti kafka-0 -- /bin/bash -c "unset JMX_PORT; /opt/bitnami/kafka/bin/kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic data"
 
 kafka-show-topics:
 	node_ip=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') && \
