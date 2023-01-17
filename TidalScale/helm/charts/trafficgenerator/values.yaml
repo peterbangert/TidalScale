@@ -30,7 +30,7 @@ trafficgenerator:
       -wiki_de
       -wiki_en
     # Workload Trace to use, options: alibaba, avazu, google, horton, IoT, retailrocket, taxi, wiki_de, wiki_en
-    trace: retailrocket
+    trace: google
     create_trace_topic: True
     # Trace Generator
     trace_generator:
