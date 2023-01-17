@@ -42,12 +42,12 @@ global:
 #######################################
 ## Global variables for the Flink Reactive subchart
 flink-reactive:
-  enabled: true
+  enabled: false
 
 #######################################
 ## Global variables for the Autoscaling Controller chart
 autoscalingcontroller:
-  enabled: true
+  enabled: false
   ## Configuration for Autoscaling Controller Meter
   config:
     k8s:

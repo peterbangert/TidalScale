@@ -1,7 +1,7 @@
 #! /bin/bash
 
-CLUSTER_NAME=$(cd k8s/terraform && terraform output cluster_name | tr -d '"')
-ZONE=$(cd k8s/terraform && terraform output zone | tr -d '"')
+CLUSTER_NAME=$(cd terraform && terraform output cluster_name | tr -d '"')
+ZONE=$(cd terraform && terraform output zone | tr -d '"')
 #POOL_NAME=$(gcloud container node-pools list --cluster $CLUSTER_NAME --zone $ZONE | grep -o "msc-thesis[a-z0-9-]*" )
 POOL_NAME="$CLUSTER_NAME-standard-pool"
 NUM_NODES=$(gcloud container node-pools describe $POOL_NAME --cluster $CLUSTER_NAME --zone $ZONE | grep NodeCount |grep -oP '\d')
