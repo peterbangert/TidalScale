@@ -8,7 +8,7 @@ kafka:
   enabled: true
 
   ## configure cluster size
-  replicas: 5
+  replicaCount: 5
 
   ## configure NodePorts for external access
   ## Length must be the same as replicaCount
@@ -18,6 +18,8 @@ kafka:
         - 31090
         - 31091
         - 31092
+        - 31093
+        - 31094
 
 #######################################
 ## Global variables for the redis chart
