@@ -1,0 +1,92 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.1
+-- Dumped by pg_dump version 15.1 (Ubuntu 15.1-1.pgdg20.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: configurations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.configurations (
+    taskmanagers integer NOT NULL,
+    cpu double precision NOT NULL,
+    parallelism integer,
+    max_rate integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.configurations OWNER TO postgres;
+
+--
+-- Data for Name: configurations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.configurations (taskmanagers, cpu, parallelism, max_rate, created_at) FROM stdin;
+7	0.4	7	274245	2023-01-17 15:01:00.023024
+7	0.6	7	73412	2023-01-17 15:01:04.726659
+5	0.6	5	213843	2023-01-17 15:22:08.117322
+3	0.5	3	132832	2023-01-17 15:50:24.75347
+3	0.4	3	132208	2023-01-17 15:50:20.518045
+3	0.6	3	131503	2023-01-17 15:50:28.94377
+5	0.2	5	120498	2023-01-17 15:02:37.948772
+10	0.3	10	172785	2023-01-17 14:55:29.317069
+10	0.2	10	171839	2023-01-17 14:55:31.389515
+4	0.3	4	147546	2023-01-17 15:27:31.856151
+7	0.2	7	77058	2023-01-17 15:01:13.03168
+3	0.3	3	102474	2023-01-17 15:59:57.922774
+1	1	1	83303	2023-01-17 15:11:32.827687
+1	1.5	1	80227	2023-01-17 15:13:06.962805
+3	0.8	3	166425	2023-01-17 15:13:46.740018
+4	0.5	4	184955	2023-01-17 15:27:38.137283
+4	0.6	4	138041	2023-01-17 16:57:24.709027
+5	0.8	5	103163	2023-01-17 16:57:43.531828
+5	0.7	5	106955	2023-01-17 16:57:39.351484
+7	0.5	7	282590	2023-01-17 15:01:02.621104
+6	0.6	6	258524	2023-01-17 15:14:29.01785
+6	0.5	6	253922	2023-01-17 15:14:31.091992
+6	0.3	6	241161	2023-01-17 15:15:13.009994
+8	0.4	8	309072	2023-01-17 17:47:29.124075
+8	0.2	8	140358	2023-01-17 15:16:35.695535
+5	0.4	5	238963	2023-01-17 15:22:03.91602
+8	0.5	8	305550	2023-01-17 17:47:22.351433
+7	0.3	7	218152	2023-01-17 15:01:08.888854
+4	0.4	4	182924	2023-01-17 15:27:33.954113
+5	0.3	5	180442	2023-01-17 15:02:29.68671
+5	0.5	5	226551	2023-01-17 15:22:06.031863
+6	0.7	6	131509	2023-01-17 15:14:26.971869
+6	0.4	6	284411	2023-01-17 15:14:33.174774
+8	0.6	8	113101	2023-01-17 17:47:34.231878
+8	0.3	8	275395	2023-01-17 15:16:00.176036
+\.
+
+
+--
+-- Name: configurations configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.configurations
+    ADD CONSTRAINT configurations_pkey PRIMARY KEY (taskmanagers, cpu);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

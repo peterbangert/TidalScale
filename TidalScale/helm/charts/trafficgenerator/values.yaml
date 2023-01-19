@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Default ReplicaCount, best for 100k mean messages
 replicaCount: 5
 
 resources: {}

@@ -63,7 +63,6 @@ autoscalingcontroller:
       cpu_max: 0.8
       cpu_min: 0.4
       mem_max: 0.9
-    deployment: gcp
 
 #######################################
 ## Global variables for the Metrics Reporter chart
@@ -99,7 +98,7 @@ postgresql:
 ## Global variables for the Prediction Aggregator chart
 predictionaggregator:
   ## boolean to enable/disable chart
-  enabled: true
+  enabled: false
   ## Configuration for Prediction Aggregator
   config:
     rescale_window: 180  # Seconds
@@ -118,3 +117,4 @@ predictionaggregator:
 trafficgenerator:
   ## boolean to enable/disable chart
   enabled: true
+  replicaCount: 10

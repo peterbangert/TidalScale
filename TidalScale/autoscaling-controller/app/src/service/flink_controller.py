@@ -5,7 +5,7 @@ from src.util import kafka_utils
 from kubernetes import client, config
 from os import listdir
 from os.path import isfile, join
-
+import os
 from os import path
 
 import yaml
@@ -20,10 +20,12 @@ class FlinkController:
         logger.info("Initializing Flink Controller")
         self.depl_name = cfg.k8s['flink-taskmanager']
         self.namespace = cfg.k8s['namespace']
-        if cfg.deployment == 'local':
-            config.load_kube_config()
+        if os.getenv('KUBERNETES_SERVICE_HOST'):
+            config.load_incluster_config()
+            print('Load in cluster kube config')
         else:
-            config.load_config()
+            config.load_kube_config()
+            print('Load local kube config')
         self.api = client.AppsV1Api()
 
     def check_flink_deployment(self):

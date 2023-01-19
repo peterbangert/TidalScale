@@ -58,62 +58,37 @@ class PredictionAggregator:
         msg_per_second = 0
         timestamp = 0
         
-        offline_training = 'offline_training' in metric_report
-
-        if 'load' in metric_report:
+        if 'offline_training' in metric_report:
             msg_per_second = float(metric_report['load'])
             timestamp = datetime.strptime(metric_report['timestamp'], config.config['time_fmt'])
-        else:
-            for item in metric_report['kafkaMessagesPerSecond']:
-                if item['metric']['topic'] == "data":
-                    msg_per_second = float(item['value'][1])
-                    timestamp = datetime.strptime(metric_report['timestamp'],config.config['time_fmt'])
+            _, _ = self.lt_predictor.get_prediction(timestamp,msg_per_second, offline_training=True)
+            return 0 
+
+
+        for item in metric_report['kafkaMessagesPerSecond']:
+            if item['metric']['topic'] == "data":
+                msg_per_second = float(item['value'][1])
+                timestamp = datetime.strptime(metric_report['timestamp'],config.config['time_fmt'])
 
         if math.isnan(msg_per_second) or msg_per_second == '' or msg_per_second == 0:
             return 0
 
-        ## Create messages for timestamp continuity
-        #self.maintain_timestamp_continuity(timestamp, msg_per_second)
-
         ## Append and Prune trace history
         self.trace_history = self.append_and_prune(timestamp, msg_per_second, self.trace_history)
 
-
-
         ## Get Predictions from Both Models
-        st_horizon, st_prediction = self.st_predictor.get_prediction(timestamp,msg_per_second, offline_training)
-        lt_horizon, lt_prediction = self.lt_predictor.get_prediction(timestamp,msg_per_second, offline_training) 
+        st_horizon, st_prediction = self.st_predictor.get_prediction(timestamp,msg_per_second)
+        lt_horizon, lt_prediction = self.lt_predictor.get_prediction(timestamp,msg_per_second) 
 
         logger.info(f"Recieved Predictions. ST: {st_prediction}, Horizon: {st_horizon}")
         logger.info(f"Recieved Predictions. LT: {lt_prediction}, Horizon: {lt_horizon}")
 
-
-        if st_prediction != 0:
-            self.st_history = self.append_and_prune(st_horizon, st_prediction, self.st_history)
-            st_score = self.get_smape_score(self.st_history)
-
-        else:
-            if len(self.st_history) > 0:
-                st_prediction = self.st_history[-1][1]
-                st_score = self.get_smape_score(self.st_history)
-            else:
-                st_prediction = 0
-                st_score = 0
+        # Calculate SMAPE score of Both Prediction models
+        st_score, st_prediction = self.calculate_score(st_horizon, st_prediction, self.st_history)
+        lt_score, lt_prediction = self.calculate_score(lt_horizon, lt_prediction, self.lt_history)
 
 
-        if lt_prediction != 0:
-            self.lt_history = self.append_and_prune(lt_horizon, lt_prediction, self.lt_history)
-
-
-            lt_score = self.get_smape_score(self.lt_history)
-        else:
-            if len(self.lt_history) > 0:
-                lt_prediction = self.lt_history[-1][1]
-                lt_score = self.get_smape_score(self.lt_history)
-            else:
-                lt_prediction = 0
-                lt_score = 0
-
+        # Calculate Weighted Score
         ## Happens when no new LT prediction, and ST determined new data is outlier
         if st_score == 0 and lt_score ==0:
             logger.info("Returning, Likely no history for SMAPE to evaluate")
@@ -149,16 +124,23 @@ class PredictionAggregator:
 
         logger.info(message)
 
-        if offline_training:
-            return 0
-
-
-        ## If Prediction is old, dont publish
-        #if timestamp < datetime.utcnow() - timedelta(minutes=1):
-        #    logger.info("Prediction too old, will not publish")
-        #    return 0
-
         self.prediction_producer.publish(message)
+
+
+    def calculate_score(self, x_horizon, x_prediction, x_history):
+        if x_prediction != 0:
+            x_history = self.append_and_prune(x_horizon, x_prediction, x_history)
+            x_score = self.get_smape_score(x_history)
+
+        else:
+            if len(x_history) > 0:
+                x_prediction = x_history[-1][1]
+                x_score = self.get_smape_score(x_history)
+            else:
+                x_prediction = 0
+                x_score = 0
+        return x_score, x_prediction
+
 
 
     def append_and_prune(self, timestamp, data, tuple_list):
@@ -232,33 +214,3 @@ class PredictionAggregator:
 
         return smape
 
-    ##
-    # Maintain Timestamp Continuity
-    #   The purpose is to create stability and robustness for the prediction models
-    #   Since timestamps are used as the index in the long term prediction
-    #   And Pandas is sensitive when a frequency is set for the data intervals
-    #   It is necessary to maintain the timestamp continuity by creating messages
-    #   When there is a gap in the message delivarance
-    #
-    #   => Meaning, if 1 minute of timestamps is missing, it will be created.
-    ##
-    def maintain_timestamp_continuity(self, timestamp, msg_per_second):
-        if len(self.trace_history) > 0:
-            last_msg = self.trace_history[-1]
-        else:
-            return []
-
-        td = math.ceil((last_msg[0] - timestamp).total_seconds() / 60.0)
-
-        if td > 1:
-            logger.info(f"Time difference: {td} minutes")
-
-        new_timestamp = 0
-        for i in range(td):
-            new_timestamp = last_msg[0] + timedelta(minutes=1)
-            new_msg_ps = last_msg[1] + (((msg_per_second - last_msg[1]) / td) * (i + 1))
-            self.trace_history.append((new_timestamp,new_msg_ps))
-
-            ## Update msg history of both models
-            _,_ = self.st_predictor.get_prediction(new_timestamp,new_msg_ps, True)
-            _,_ = self.lt_predictor.get_prediction(new_timestamp,new_msg_ps, True) 
