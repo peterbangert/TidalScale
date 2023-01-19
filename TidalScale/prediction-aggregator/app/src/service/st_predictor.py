@@ -37,12 +37,7 @@ class ShortTermPredictionModel:
 
 
 
-    def get_prediction(self, msg_timestamp, msg_per_second, offline_training):
-
-        # Return 0 if Offline Training
-        if offline_training:
-            logger.info("=====================================Offline ST Predictor")
-            return 0,0
+    def get_prediction(self, msg_timestamp, msg_per_second):
 
         ## SPIKE DETECTION
         ## Check if <8x MSE of Quadratic Regression

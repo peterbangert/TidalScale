@@ -38,9 +38,13 @@ class LongTermPredictionModel:
         self.time_fmt = config.config['time_fmt']
 
 
-    def get_prediction(self, msg_timestamp, msg_per_second, offline):
+    def get_prediction(self, msg_timestamp, msg_per_second, offline_training=False):
 
-
+        # Return if Offline Training Data
+        if offline_training: 
+            logger.info("=====================================Offline LT Predictor")
+            self.trace_history.append((msg_timestamp, msg_per_second))
+            return 0,0
 
         # If trace history new
         if len(self.trace_history) == 0:
@@ -51,10 +55,10 @@ class LongTermPredictionModel:
         # Set current metric timestamp to exactly minute difference
         elif (msg_timestamp - self.trace_history[-1][0]).seconds > config.config['seconds_between_traces'] - config.config['metric_frequency']:
 
-            minute_diff = int((msg_timestamp - self.trace_history[-1][0]).seconds / config.config['seconds_between_traces'])
-            minute_diff = 1 if minute_diff == 0 else minute_diff
+            #minute_diff = int((msg_timestamp - self.trace_history[-1][0]).seconds / config.config['seconds_between_traces'])
+            #minute_diff = 1 if minute_diff == 0 else minute_diff
+            #msg_timestamp = self.trace_history[-1][0] + timedelta(seconds=minute_diff * config.config['seconds_between_traces'])
 
-            msg_timestamp = self.trace_history[-1][0] + timedelta(seconds=minute_diff * config.config['seconds_between_traces'])
             self.trace_history.append((msg_timestamp,msg_per_second))
 
         else:
@@ -73,10 +77,6 @@ class LongTermPredictionModel:
             logger.info("Not enough cycles for LT prediction")
             return 0,0
 
-        # Return if Offline Training Data
-        if offline: 
-            logger.info("=====================================Offline LT Predictor")
-            return 0,0
 
         ## Convert Trace History to Pandas DataFrame
         # 1. Create Series with timestamp as index
@@ -96,7 +96,6 @@ class LongTermPredictionModel:
         # Get Prediction
         prediction, prediction_horizon = self.prediction_model.create_prediction(pd_trace)
         
-
 
         return prediction_horizon, prediction
 

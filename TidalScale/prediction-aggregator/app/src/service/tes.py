@@ -54,7 +54,6 @@ class TripleExponentialSmoothing:
         if not isinstance(prediction.index[-1], datetime):
             logger.error(f"HORIZON ISNT DATETIME")
             logger.error(f"{trace_history}")
-            raise Exception('HORIZON ISNT DATETIME')
-
+            
         return prediction.iloc[-1], prediction.index[-1]
 

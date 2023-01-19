@@ -15,7 +15,7 @@ cluster-create:
 	./scripts/cluster-terraform.sh
 
 cluster-destroy:
-	cd helm/terraform && terraform destroy -auto-approve
+	cd terraform && terraform destroy -auto-approve
 
 cluster-increase-nodepool:
 	./scripts/cluster-resize.sh
@@ -88,13 +88,13 @@ flink-application-mode-install: ${FLINK_DIR}
 	./scripts/flink-application-mode-install.sh
 
 flink-reactive-hpa-deploy:
-	cd k8s/flink-reactive-hpa/ && helm install flink-reactive-hpa .
+	cd helm/flink-reactive-hpa/ && helm install flink-reactive-hpa .
 
 flink-reactive-hpa-destroy:
 	helm uninstall flink-reactive-hpa
 
 flink-reactive-deploy:
-	cd k8s/flink-reactive/ && helm install flink-reactive .
+	cd helm/flink-reactive/ && helm install flink-reactive .
 
 flink-reactive-destroy:
 	helm uninstall flink-reactive

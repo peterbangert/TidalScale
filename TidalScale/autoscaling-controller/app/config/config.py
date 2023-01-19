@@ -23,7 +23,7 @@ config = {
     "rescale_window": 180,
     "metric_frequency": 2,
     "time_fmt": '%Y-%m-%d %H:%M:%S.%f',
-    "parallelization_upper_bound": 10,
+    "parallelization_upper_bound": 20,
     "parallelization_lower_bound": 1
 }
 
@@ -32,11 +32,6 @@ thresholds = {
     "cpu_min": .4,
     "mem_max": .9,
 }
-
-# Determines where to load kube config
-#   locally at $HOME/.kube/config 
-#   or in-cluster config as ServiceAccount usage expects
-deployment = 'local'
 
 postgres = {
     "host": "localhost",
