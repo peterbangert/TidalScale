@@ -102,13 +102,25 @@ class RescaleController:
                     logger.info(f"Rescale Aborted: Target Parallelism incorrect. Upscale: {upscale}, Target: {target_parallelism}, current: {self.current_parallelism}")
 
     def get_lag_recovery_parallelism(self, flink_ingestion, kafka_lag, target_parallelism):
+        
+        ## Calculate Workload for next scaling window
         workload = self.agg_prediction * config.config['rescale_window'] + kafka_lag
+        
+        ## Get Target Ingestion Rate
         t_ingestion_rate = math.ceil(workload / config.config['rescale_window'])
-        t_parrallelism = math.ceil(( t_ingestion_rate / flink_ingestion ) * self.current_parallelism)
+        
+        ## Get Target Parallelism
+        t_parrallelism = db.get_configuration(t_ingestion_rate)
+        if t_parrallelism is None:
+            t_parrallelism = self.quotient_scale(flink_ingestion, t_ingestion_rate)
+        t_parrallelism = self.scale_bounds(t_parrallelism, True)
+        
         if t_parrallelism < target_parallelism:
             logger.info(f"Lag Recovery Parallelism less than Regression Parallelism: t_p {t_parrallelism}, target {target_parallelism}")
             t_parrallelism = target_parallelism
         logger.info(f"Target Parallelism: {t_parrallelism}.  workload: {workload}, t_ingestion_rate: {t_ingestion_rate}, c_ingestion_rate: {flink_ingestion}")
+
+        t_parrallelism = min(target_parallelism * 2, t_parrallelism)
 
         return t_parrallelism
 

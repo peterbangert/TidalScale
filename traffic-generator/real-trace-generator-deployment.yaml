@@ -16,9 +16,23 @@ spec:
     spec:
       containers:
       - name: real-trace-generator
-        image: eu.gcr.io/bangert-thesis/real-trace-generator
+        image: eu.gcr.io/thesistidalscale/real-trace-generator
         ports:
         - containerPort: 80
       serviceAccountName: default
       nodeSelector:
         iam.gke.io/gke-metadata-server-enabled: "true"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-trace-topic-exit
+spec:
+  template:
+    spec:
+      containers:
+      - name: real-trace-generator
+        image: eu.gcr.io/thesistidalscale/real-trace-generator
+        args: ["-cte"]
+      restartPolicy: Never
+  backoffLimit: 4

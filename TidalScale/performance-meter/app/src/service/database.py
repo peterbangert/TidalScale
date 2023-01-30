@@ -4,6 +4,8 @@ from config import config
 from src.util import kafka_utils
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from psycopg2.errorcodes import UNIQUE_VIOLATION
+from psycopg2 import errors
 import logging
 logger = logging.getLogger(__name__)
 
@@ -57,9 +59,6 @@ class Database():
         db_list = self.cursor.fetchall()
         return (config.postgres['database'],) in db_list
 
-    def update_db(self, current_load):
-        return 0
-
     def clear_database(self):
         self.cursor.execute(f"DROP DATABASE IF EXISTS {config.postgres['database']};")
 
@@ -69,22 +68,60 @@ class Database():
     def create_table(self):
         self.cursor.execute(f"{config.postgres['table_schema']}")
 
-    def insert_performance(self, taskmanagers, cpu, parallelism, max_rate):
+    def insert_max_rate(self, taskmanagers, cpu, parallelism, max_rate):
         self.cursor.execute(config.postgres['insert'],
                             (taskmanagers, cpu, parallelism, max_rate))
 
-    def update_performance(self, taskmanagers, cpu, max_rate):
+    def update_max_rate(self, taskmanagers, cpu, max_rate):
         self.cursor.execute(config.postgres['update'], (max_rate, taskmanagers, cpu))
 
+    ## Get Rates
     def check_max_rate(self, taskmanagers, cpu):
         try:
-            self.cursor.execute(config.postgres['check_max_rate'], (str(taskmanagers),cpu))
+            self.cursor.execute(config.postgres['check_max_rate'], (str(taskmanagers),str(cpu)))
             result = self.cursor.fetchall()
             return None if len(result) == 0 else result[0][0]
         except Exception as e:
             logger.info(f"Querying Database failed, exception {e}")
             return None
 
+    def get_rates(self, taskmanagers, cpu):
+        try:
+            self.cursor.execute(config.postgres['get_rates'], (str(taskmanagers),str(cpu)))
+            result = self.cursor.fetchall()
+            return (None,None) if len(result) == 0 else result[0]
+        except Exception as e:
+            logger.info(f"Querying Database failed, exception {e}")
+            return None
+
+    ## Insert Rates
+    def insert_max_rate(self, taskmanagers, cpu, parallelism, max_rate):
+        try:
+            self.cursor.execute(config.postgres['insert_max_rate'],
+                            (taskmanagers, cpu, parallelism, max_rate))
+        except errors.lookup(UNIQUE_VIOLATION) as e:
+            logger.info("Dirty Read occured, skipping..")
+
+
+    def insert_rates(self, taskmanagers, cpu, parallelism, max_rate, ema_rate):
+        try:
+            self.cursor.execute(config.postgres['insert_rates'],
+                            (taskmanagers, cpu, parallelism, max_rate, ema_rate))
+        except errors.lookup(UNIQUE_VIOLATION) as e:
+            logger.info("Dirty Read occured, skipping..")
+
+    ## Update Rates
+    def update_max_rate(self, taskmanagers, cpu, max_rate):
+        self.cursor.execute(config.postgres['update_max_rate'], (max_rate, taskmanagers, cpu))
+
+    def update_ema_rate(self, taskmanagers, cpu, ema_rate):
+        self.cursor.execute(config.postgres['update_ema_rate'], (ema_rate, taskmanagers, cpu))
+
+    def update_rates(self, taskmanagers, cpu, max_rate, ema_rate):
+        self.cursor.execute(config.postgres['update_rates'], (max_rate, ema_rate, taskmanagers, cpu))
+
+    ## Select All
     def get_configurations(self):
         self.cursor.execute(config.postgres["select_all"])
         return self.cursor.fetchall()
+
