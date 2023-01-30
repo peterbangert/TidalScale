@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     if args.create_trace_topic_exit or config.create_trace_topic_exit:
         create_trace_topic.create_trace_topic(args)
-        exit()
+        exit(0)
         
 
     if args.trace is not None and args.trace not in config.trace_files:

@@ -4,6 +4,12 @@ metadata:
   name: trafficgenerator-configmap
   labels:
     app: trafficgenerator
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook": pre-install
 data:
   trafficgenerator-config.yaml: |+
     {{- toYaml $.Values.trafficgenerator.config | nindent 12 }}
+  

@@ -1,0 +1,38 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-trace-topic-exit
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: real-trace-generator
+        image: eu.gcr.io/{{ .Values.global.projectId }}/real-trace-generator
+        command: ["python", "run.py"]
+        args: ["-cte"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      restartPolicy: Never
+      volumes:
+        - name: config-volume
+          projected:
+            sources:
+            - configMap:
+                name: trafficgenerator-configmap
+                items:
+                  - key: trafficgenerator-config.yaml
+                    path: trafficgenerator-config.yaml
+            - configMap:
+                name: {{ .Release.Name }}-configmap
+                items:
+                  - key: config.yaml
+                    path: config.yaml
+  backoffLimit: 4

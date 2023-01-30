@@ -31,8 +31,8 @@ trafficgenerator:
       -wiki_de
       -wiki_en
     # Workload Trace to use, options: alibaba, avazu, google, horton, IoT, retailrocket, taxi, wiki_de, wiki_en
-    trace: google
-    create_trace_topic: True
+    trace_file: google
+    create_trace_topic: False
     # Trace Generator
     trace_generator:
       # Average msg/second to adjust trace to

@@ -31,6 +31,5 @@ dependencies:
     condition: trafficgenerator.enabled
   - name: postgresql
     condition: postgresql.enabled
-    condition: performancemeter.enabled
   - name: flink-reactive
     condition: flink-reactive.enabled

@@ -60,6 +60,8 @@ def create_topic(bootstrap_server, topic, partitions):
     except:
         logger.error(f'Error occured connecting to kafka broker. Address may be wrong {bootstrap_server}')
 
+
+    logger.info(f"Creating topic: {topic}, with {partitions} partitions")
     fs = kafka_admin.create_topics([NewTopic(topic, num_partitions=partitions, replication_factor=1)])
     
     # Wait for operation to finish.

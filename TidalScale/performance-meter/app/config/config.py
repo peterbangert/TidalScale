@@ -7,7 +7,8 @@ logger = {
 
 config = {
     "rescale_window" : 120,
-    "metric_frequency" : 2
+    "metric_frequency" : 2,
+    'alpha' : 0.2
 }
 
 kafka = {
@@ -35,18 +36,36 @@ postgres = {
     "password": "admin",
     "table": "configurations",
     "database": "tidalscale",
+
+    ## Table Schema
     "table_schema": "CREATE TABLE configurations"
                     "(taskmanagers int, "
                     "cpu float, "
                     "parallelism int, "
                     "max_rate int NOT NULL, "
+                    "ema_rate int, "
                     "PRIMARY KEY (taskmanagers, cpu), "
                     "created_at timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL);",
-    "insert": "INSERT INTO configurations ("
+
+    ## Insert Rates
+    "insert_max_rate": "INSERT INTO configurations ("
               "taskmanagers,cpu,parallelism,max_rate)"
               " values "
-              "(" + 3*"%s, " + " %s );",        
-    "update": "UPDATE configurations SET max_rate = %s WHERE taskmanagers = %s AND cpu = %s;",
+              "(" + 3*"%s, " + " %s );",
+    "insert_rates": "INSERT INTO configurations ("
+              "taskmanagers,cpu,parallelism,max_rate,ema_rate)"
+              " values "
+              "(" + 4*"%s, " + " %s );",
+    
+    ## Update Rates
+    "update_max_rate": "UPDATE configurations SET max_rate = %s WHERE taskmanagers = %s AND cpu = %s;",
+    "update_ema_rate": "UPDATE configurations SET ema_rate = %s WHERE taskmanagers = %s AND cpu = %s;",
+    "update_rates": "UPDATE configurations SET max_rate = %s, ema_rate = %s WHERE taskmanagers = %s AND cpu = %s;",
+
+    ## Get Rates
     "check_max_rate": "SELECT max_rate FROM configurations WHERE taskmanagers = %s AND cpu = %s;",
+    "get_rates": "SELECT max_rate, ema_rate FROM configurations WHERE taskmanagers = %s AND cpu = %s;",
+    
+    ## Select All
     "select_all": "SELECT * FROM configurations;"
 }

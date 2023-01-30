@@ -47,7 +47,8 @@ def config_3d_regression(rows, expected_load):
 
     x = [x[0] for x in rows]  # Taskmanager
     z = [x[1] for x in rows]  # CPU
-    y = [y[3] for y in rows]  # Max Rate
+    #y = [y[3] for y in rows]  # Max Rate
+    y = [y[4] for y in rows]  # EMA Rate
 
     # Quotient Based Rule
     if len(x) == 1:
