@@ -31,7 +31,7 @@ class TripleExponentialSmoothing:
         best_c = None
         best_aic = np.inf
         for c in combinations:
-            model = ExponentialSmoothing(trace_history.load, seasonal_periods=mult * 24, seasonal=c,
+            model = ExponentialSmoothing(trace_history.load, seasonal_periods=mult * config.config['seasonal_period'], seasonal=c,
                                          initialization_method="estimated").fit()
             aic = model.aic
             if aic < best_aic:
@@ -44,7 +44,7 @@ class TripleExponentialSmoothing:
     def create_prediction(self, trace_history):
         model, hyper_params = self.optimizeHoltWinters(trace_history, config.config['traces_per_hour'])
 
-        model = ExponentialSmoothing(trace_history.load, seasonal_periods=24 * config.config['traces_per_hour'],
+        model = ExponentialSmoothing(trace_history.load, seasonal_periods=config.config['seasonal_period'] * config.config['traces_per_hour'],
                                      seasonal=hyper_params, initialization_method="estimated").fit()
 
 
@@ -54,6 +54,11 @@ class TripleExponentialSmoothing:
         if not isinstance(prediction.index[-1], datetime):
             logger.error(f"HORIZON ISNT DATETIME")
             logger.error(f"{trace_history}")
+
+        # print(prediction)
+        # print(prediction.index)
+        # print(prediction.values)
             
-        return prediction.iloc[-1], prediction.index[-1]
+        # Return Precitions and Horizon Timestamps
+        return prediction.values, prediction.index
 

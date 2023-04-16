@@ -39,7 +39,8 @@ postgres = {
     "password": "admin",
     "table": "configurations",
     "database": "tidalscale",
-    "select_all": "SELECT * FROM configurations;"
+    "select_all": "SELECT * FROM configurations;",
+    "select_rates": "SELECT taskmanagers, cpu, max_rate, ema_rate FROM configurations;"
 }
 
 k8s = {

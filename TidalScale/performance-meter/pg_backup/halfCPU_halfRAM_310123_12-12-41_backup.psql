@@ -1,0 +1,135 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.5 (Debian 14.5-1.pgdg110+1)
+-- Dumped by pg_dump version 15.1 (Ubuntu 15.1-1.pgdg20.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: configurations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.configurations (
+    taskmanagers integer NOT NULL,
+    cpu double precision NOT NULL,
+    parallelism integer,
+    max_rate integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.configurations OWNER TO postgres;
+
+--
+-- Data for Name: configurations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.configurations (taskmanagers, cpu, parallelism, max_rate, created_at) FROM stdin;
+6	0.9	6	143698	2022-12-08 19:09:39.979045
+10	0.5	10	177768	2022-12-07 13:03:45.381866
+10	0.4	10	170468	2022-12-07 12:32:03.206852
+3	0.7	3	99940	2022-12-08 17:16:01.029687
+9	0.5	9	132086	2022-12-07 12:37:49.71718
+2	0.8	2	73735	2022-12-08 21:18:49.90158
+5	0.4	5	97551	2022-12-07 12:29:54.078599
+10	0.8	10	272004	2022-12-08 17:10:07.493731
+8	0.3	8	107312	2022-12-07 12:41:49.726829
+2	0.9	2	74547	2022-12-08 21:18:47.558843
+9	0.7	9	48186	2022-12-07 15:41:54.060795
+9	0.4	9	137842	2022-12-07 12:37:56.890318
+10	0.7	10	279950	2022-12-08 17:10:16.983572
+10	0.6	10	263970	2022-12-07 13:04:07.226059
+10	0.3	10	258205	2022-12-07 12:32:17.560507
+10	0.2	10	243620	2022-12-08 17:12:25.069568
+9	0.3	9	101920	2022-12-07 12:37:44.360421
+7	0.3	7	104991	2022-12-07 15:53:20.160518
+2	1	2	75228	2022-12-08 21:18:40.523066
+6	0.8	6	190692	2022-12-08 19:09:42.323497
+6	0.7	6	161058	2022-12-07 15:59:53.380153
+8	0.6	8	109669	2022-12-07 12:59:26.687157
+3	0.8	3	102489	2022-12-08 17:16:10.296686
+6	0.6	6	169704	2022-12-07 15:59:55.745687
+3	0.6	3	96602	2022-12-08 17:16:03.329706
+6	0.5	6	129822	2022-12-07 15:59:50.981079
+6	0.4	6	122428	2022-12-07 15:59:58.10952
+6	0.3	6	88905	2022-12-07 16:00:00.477143
+6	0.2	6	56797	2022-12-07 16:03:14.513579
+2	0.6	2	60866	2022-12-08 21:18:35.821356
+2	0.5	2	52370	2022-12-08 21:51:26.517079
+3	0.4	3	61267	2022-12-08 17:17:42.016207
+3	0.5	3	80868	2022-12-08 17:16:40.501623
+4	1	4	87154	2022-12-08 22:43:33.56283
+1	1	1	46304	2022-12-08 16:30:24.087409
+1	0.9	1	43033	2022-12-08 17:09:12.889818
+5	0.3	5	72853	2022-12-07 16:04:59.012207
+4	0.3	4	69661	2022-12-07 11:45:41.539459
+4	0.9	4	104900	2022-12-08 22:43:35.893798
+4	0.4	4	88886	2022-12-07 11:50:17.734483
+4	0.8	4	104331	2022-12-08 21:11:26.057977
+4	0.7	4	102316	2022-12-07 16:11:53.364209
+8	0.4	8	138112	2022-12-07 12:41:59.392194
+4	0.6	4	101644	2022-12-07 12:28:45.339606
+4	0.5	4	96872	2022-12-07 11:54:13.999801
+7	0.7	7	169233	2022-12-08 18:36:18.033636
+7	0.6	7	168598	2022-12-08 18:37:24.260869
+7	0.8	7	169903	2022-12-08 18:37:26.668702
+7	0.5	7	162821	2022-12-07 15:54:13.822463
+7	0.4	7	121285	2022-12-07 12:30:15.298938
+3	1	3	73041	2022-12-08 19:02:42.324126
+8	0.5	8	155718	2022-12-07 12:42:08.883503
+8	0.7	8	154082	2022-12-07 17:34:44.113698
+9	0.6	9	55564	2022-12-07 12:37:52.090683
+3	0.9	3	98639	2022-12-08 17:16:08.017781
+5	0.9	5	163778	2022-12-08 18:36:15.531822
+5	0.8	5	162440	2022-12-07 17:15:44.079584
+5	0.7	5	158238	2022-12-07 16:04:54.295788
+5	0.6	5	151578	2022-12-07 12:30:12.9835
+5	0.5	5	145123	2022-12-07 12:29:56.445694
+2	0.7	2	70625	2022-12-08 21:18:38.176965
+\.
+
+
+--
+-- Name: configurations configurations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.configurations
+    ADD CONSTRAINT configurations_pkey PRIMARY KEY (taskmanagers, cpu);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

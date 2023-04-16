@@ -14,10 +14,7 @@ class TraceFileReader:
 
     def __init__(self,args):
 
-        if args.trace not in config.config.trace_files:
-            raise ValueError(f'{args.trace} not found. Given Trace File not existent')
-
-        self.trace = args.trace
+        self.trace = config.trace
         self.five_minute_trace = f'{self.trace}_5min.csv'
         self.trace_file = open(f'traces/{self.five_minute_trace}', 'r')
         self.header_line = self.trace_file.readline()

@@ -5,7 +5,7 @@ SHELL := /bin/bash
 ##
 NODE_IP=$$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(.type=="ExternalIP")].address}') 
 METRIC_GREP=$$(kafkacat -b $$NODE_IP:31090 -L | grep 'metric')
-PROJECT_NAME=thesistidalscale
+PROJECT_NAME=$$(gcloud config get-value project)
 
 deploy:
 	${MAKE} build

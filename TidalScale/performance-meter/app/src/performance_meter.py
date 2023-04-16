@@ -30,11 +30,12 @@ class PerformanceMeter:
         while True:
             metric_report = self.consumer.get_next_message()
             if metric_report:
-                logger.info(f"Recieved Metric Report")
-                metric = Metric(metric_report)
-                if metric.no_nulls:
+                try:
+                    logger.info(f"Recieved Metric Report")
+                    metric = Metric(metric_report)
                     self.configuration_mgr.update_configurations(metric)
-                else:
+                except Exception as e:
+                    logger.info(f"{e}")
                     continue
             else:
                 # Metrics are reported every 2 seconds

@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 
 def create_trace_topic(args):
 
-    if args.trace not in config.trace_files:
-        raise ValueError(f'{args.trace} not found. Given Trace File not existent')
+    logger.info(f"Using trace file: {config.trace}")
 
     # Delete Trace Topic if Exists
     bootstrap_server = kafka_utils.get_broker(args)
@@ -51,7 +50,7 @@ def create_trace_topic(args):
     # Setup Trace and Message Format
     current_timestamp = datetime.utcnow()
     timestamp = current_timestamp - timedelta(hours=config.trace_generator['lt_predictor_training_period'])
-    five_minute_trace = f'{args.trace}_5min.csv'
+    five_minute_trace = f'{config.trace}_5min.csv'
 
     with open(f'traces/{five_minute_trace}', 'r') as tf:
         for line in tf:
@@ -60,11 +59,13 @@ def create_trace_topic(args):
             # Message Format: 2014-10-21 00:45:00,106987.59757204453
             load = trace_scale(float(line.split(",")[1]))
             message = {
-                "offline_training": True,
+                'trace': config.trace,
+                'trace_file': five_minute_trace,
                 'timestamp': f"{timestamp}",
                 'load': load
             }
             if timestamp < current_timestamp:
+                message["offline_training"] = True
                 producer.produce(config.kafka['metric_topic'], json.dumps(message, indent=4, sort_keys=True))
             else:
                 producer.produce(config.kafka['trace_topic'], json.dumps(message, indent=4, sort_keys=True))

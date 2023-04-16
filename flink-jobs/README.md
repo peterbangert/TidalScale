@@ -14,7 +14,7 @@
 1. Build Image
 
 ```
-docker build -t eu.gcr.io/project-name/quickstart .
+cd flink-jobs; docker build -t eu.gcr.io/project-name/flink-jobs:statefulwordcount .
 
 ```
 

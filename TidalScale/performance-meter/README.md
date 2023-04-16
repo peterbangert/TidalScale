@@ -48,12 +48,11 @@ export PGPASSWORD=$(kubectl get secret --namespace default tidalscale-postgresql
 3. Connect to database from outside the cluster:
 
 ```    
-kube=ctl port-forward --namespace default svc/my-postgresql 5432:5432
+kubectl port-forward --namespace default svc/tidalscale-postgresql 5432:5432
 ```
 
 4. Drop and Restore table
 
 ```
-psql --host 127.0.0.1 -U postgres -d postgres -p 5432 -d tidalscale -c 'drop table configurations;'
-psql --host 127.0.0.1 -U postgres -d postgres -p 5432 -d tidalscale < pg_backup/221222_17-07-25_backup.psql
+psql --host localhost -U postgres -d postgres -p 5432 -d tidalscale -c 'drop table configurations;'; psql --host localhost -U postgres -d postgres -p 5432 -d tidalscale < pg_backup/221222_17-07-25_backup.psql
 ```

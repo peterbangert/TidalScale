@@ -7,7 +7,7 @@ from config import config
 from src.util import config_loader
 import fileinput
 from src.util import kafka_utils
-from src.prediction_aggregator import PredictionAggregator
+from src.tidalscale_predictor import TidalScalePredictor
 
 
 
@@ -48,6 +48,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Traffic Generator')
     parser.add_argument('-l','--local',action='store_true',help='Run traffic generator locally, use local kafka broker')
     parser.add_argument('-b','--broker',help='<Address:Port> of kafka broker, default is config.py')
+    parser.add_argument('-s','--synthetic',action='store_true', help='Predict of synthetic metrics, so uses relative timestamps instead of current UTC time')
     parser.add_argument('--config_path',default='/config/')
     args = parser.parse_args()
     config_loader.load_config(args=args)
@@ -57,5 +58,5 @@ if __name__ == "__main__":
     if not kafka_utils.check_topic_exists(bootstrap_server, config.kafka['agg_prediction_topic']):
         kafka_utils.create_topic(bootstrap_server,config.kafka['agg_prediction_topic'],config.kafka['agg_prediction_topic_partitions'])
 
-    prediction_aggregator = PredictionAggregator(args)
+    prediction_aggregator = TidalScalePredictor(args)
     prediction_aggregator.run()
