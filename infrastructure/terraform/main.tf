@@ -17,7 +17,7 @@ provider "google" {
 #}
 
 variable "gke_num_nodes" {
-  default     = 5
+  default     = 4
   description = "number of gke nodes"
 }
 

@@ -11,8 +11,7 @@ class Metric:
 
         for x in ['cpuUsage','flinkNumOfTaskManagers','kafkaLag','memUsage','flinkIngestionRate']:
             if not bool(metric_report[x]):
-                logger.info("No data")
-                return 0
+                raise Exception('Metric Report Error: missing data')
 
         # Gather Metrics
         self.cpu_usage = float(metric_report['cpuUsage'][0]['value'][1])
@@ -31,5 +30,4 @@ class Metric:
         self.no_nulls = True
         for x in [self.cpu_usage,self.taskmanagers,self.kafka_lag,self.msg_per_second,self.mem_usage,self.flink_ingestion]:
             if math.isnan(x) or x == '':
-                self.cooldown_timer = datetime.now()
-                self.no_nulls = False
+                raise Exception('Metric Report Error: null values')

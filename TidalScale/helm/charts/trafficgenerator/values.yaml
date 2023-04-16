@@ -30,8 +30,10 @@ trafficgenerator:
       -taxi
       -wiki_de
       -wiki_en
+      -sawtooth
+      -straight
     # Workload Trace to use, options: alibaba, avazu, google, horton, IoT, retailrocket, taxi, wiki_de, wiki_en
-    trace_file: google
+    trace: retailrocket
     create_trace_topic: False
     # Trace Generator
     trace_generator:
@@ -39,13 +41,14 @@ trafficgenerator:
       avg_msg_per_second: 200000.0
       # Mean of Trace File: (108k from provided traces)
       mean: 108000.0
+      #mean: 200000.0
       # Std Deviation of Trace File
       std_deviation: 0.1
       # Seconds Between Trace: standard from file is 300 seconds
       seconds_between_traces: 60
-      # Expand Variance of trace by this factor
+      # Expand Variance of trace by this factor: 3 is standard
       variance: 3
-      # Number of real hours to train on, amount of cycles depends on second Between Traces scale to trace source
+      # Number of real hours to train on, amount of cycles depends on second Between Traces scale to trace source (default 20)
       lt_predictor_training_period: 20 # hours
       # Number of pods
       pods: 10

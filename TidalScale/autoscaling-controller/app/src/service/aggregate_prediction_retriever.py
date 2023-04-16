@@ -30,6 +30,7 @@ class PredictionRetriever:
                 bootstrap_servers=[bootstrap_server],
                 value_deserializer=lambda m: json.loads(m.decode('ascii')),
                 enable_auto_commit=False,
+                consumer_timeout_ms=10000, # 10 Seconds
                 auto_offset_reset='latest')
 
             tp = TopicPartition(config.kafka['agg_prediction'],0)
@@ -44,6 +45,7 @@ class PredictionRetriever:
         self.prediction_consumer.poll()
         # go to end of the stream
         self.prediction_consumer.seek_to_end()
+        last_msg = None
         last_msg = next(self.prediction_consumer).value
 
         while datetime.strptime(last_msg['timestamp'], config.config['time_fmt']) < datetime.utcnow() - timedelta(seconds=config.config['metric_frequency']):

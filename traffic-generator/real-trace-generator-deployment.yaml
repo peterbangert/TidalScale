@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: real-trace-generator
-        image: eu.gcr.io/thesistidalscale/real-trace-generator
+        image: eu.gcr.io/tidalscale-eval/real-trace-generator
         ports:
         - containerPort: 80
       serviceAccountName: default
@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: real-trace-generator
-        image: eu.gcr.io/thesistidalscale/real-trace-generator
+        image: eu.gcr.io/tidalscale-eval/real-trace-generator
         args: ["-cte"]
       restartPolicy: Never
   backoffLimit: 4

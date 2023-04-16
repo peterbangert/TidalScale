@@ -19,7 +19,7 @@ kafka = {
 pubsub = {
     'batch':True,
     'topic_id': 'data',
-    'project_id':'bangert-thesis'
+    'project_id':''
 }
 
 kafka_local = {
@@ -50,7 +50,7 @@ broker = 'kafka'
 create_trace_topic = False
 create_trace_topic_exit = False
 
-trace_file = "retailrocket"
+trace = "retailrocket"
 
 # Average message per second trace is 108k, configured average rate will scale trace files
 trace_generator = {

@@ -31,5 +31,7 @@ config = {
     'time_fmt' : '%Y-%m-%d %H:%M:%S.%f',
     "MSE_bounds": 8,
     "spike_window": 10,
-    "base_regression_length": 10
+    "base_regression_length": 5,
+    'seasonal_period': 24, #hours
+    'smape_alpha': 0.5
 }

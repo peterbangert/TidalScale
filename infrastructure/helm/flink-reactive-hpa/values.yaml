@@ -24,7 +24,7 @@ serviceAccount:
   name: "flink-service-account"
 
 flinkJob:
-  image: eu.gcr.io/thesistidalscale/flink-jobs:statefulwordcount
+  image: eu.gcr.io/tidalscale-eval/flink-jobs:statefulwordcount
   mainClass: de.tu_berlin.flink_jobs.StatefulWordCount
 
 #  image: eu.gcr.io/bangert-thesis/flink-jobs:wordcount

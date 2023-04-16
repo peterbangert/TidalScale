@@ -3,7 +3,7 @@ SHELL := /bin/bash
 #    TRAFFIC GENERATOR DEPLOYMENT
 #
 ##
-PROJECT_NAME=thesistidalscale
+PROJECT_NAME= $$(gcloud config get-value project)
 
 deploy:
 	${MAKE} kafka-create-data-topic
@@ -25,6 +25,12 @@ delete-all-topics:
 	${MAKE} kafka-delete-data-topic
 	${MAKE} kafka-delete-metrics-topic
 	${MAKE} kafka-delete-agg-prediction-topic
+
+delete-trace-agg-metric-topics:
+	${MAKE} kafka-delete-trace-topic
+	${MAKE} kafka-delete-metrics-topic
+	${MAKE} kafka-delete-agg-prediction-topic
+
 
 build:
 	docker build -t eu.gcr.io/${PROJECT_NAME}/real-trace-generator .

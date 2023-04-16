@@ -16,9 +16,6 @@ class TraceKafkaReader:
 
     def __init__(self,args):
 
-        if args.trace not in config.trace_files:
-            raise ValueError(f'{args.trace} not found. Given Trace File not existent')
-
         bootstrap_server = kafka_utils.get_broker(args)
         logger.info("Setting Up Kafka Consumer")
         try:

@@ -46,7 +46,7 @@ if __name__ == "__main__":
     '''
 
     parser = argparse.ArgumentParser(description='Traffic Generator')
-    parser.add_argument('-t','--trace', default=config.trace_file, help=f'Load Trace model to use for traffic generator ' \
+    parser.add_argument('-t','--trace', default=None, help=f'Load Trace model to use for traffic generator ' \
                                                                 f'Possible Traces Include {config.trace_files}')
     parser.add_argument('-j','--job',default='WordCount',help='The processing job used by DSP system')
     parser.add_argument('--pubsub',default=False,action='store_true',help='Use Google PubSub')
@@ -59,6 +59,12 @@ if __name__ == "__main__":
     config_loader.load_config(args=args)
     init_logger()
 
+    if args.trace is not None:
+        if args.trace not in config.trace_files:
+            raise ValueError(f'Trace Argument non existent, trace file {args.trace} does not exist, please refer run.py -h for more info')
+        else:
+            setattr(config, "trace", args.trace)
+
     if args.create_trace_topic or config.create_trace_topic:
         create_trace_topic.create_trace_topic(args)
 
@@ -66,10 +72,6 @@ if __name__ == "__main__":
         create_trace_topic.create_trace_topic(args)
         exit(0)
         
-
-    if args.trace is not None and args.trace not in config.trace_files:
-        raise ValueError(f'Trace Argument non existent, trace file {args.trace} does not exist, please refer run.py -h for more info')
-
 
     # Read from stdin if input file not given as argument
     # infile = args.infile if args.infile else fileinput.input()

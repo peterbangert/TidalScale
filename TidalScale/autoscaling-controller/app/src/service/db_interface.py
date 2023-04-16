@@ -28,7 +28,7 @@ def get_configuration(expected_load):
             f"dbname='{config.postgres['database']}'")
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = conn.cursor()
-        cursor.execute(config.postgres["select_all"])
+        cursor.execute(config.postgres["select_rates"])
         rows = cursor.fetchall()
         conn.close()
 
@@ -47,8 +47,10 @@ def config_3d_regression(rows, expected_load):
 
     x = [x[0] for x in rows]  # Taskmanager
     z = [x[1] for x in rows]  # CPU
-    #y = [y[3] for y in rows]  # Max Rate
-    y = [y[4] for y in rows]  # EMA Rate
+    max_rate = [y[2] for y in rows]  # Max Rate
+    ema_rate = [y[3] for y in rows]  # EMA Rate
+    y = [sum(z)/2 for z in zip(max_rate, ema_rate)]
+    #y = max_rate
 
     # Quotient Based Rule
     if len(x) == 1:
